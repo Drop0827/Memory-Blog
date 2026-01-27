@@ -1,0 +1,16 @@
+@mixin scrollbar-style($thumb-color) {
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $thumb-color;
+        border-radius: 4px;
+        display: none;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        display: block;
+    }
+}

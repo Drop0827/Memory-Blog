@@ -1,0 +1,30 @@
+@use "@/styles/var" as *;
+
+.ContainerComponent {
+    .main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 1200px;
+        padding: 20px;
+        margin: 0 auto;
+
+        .left {
+            width: 73%;
+            margin: 0 auto;
+            transition: width $move;
+        }
+
+        .right {
+            width: 24%;
+            border-radius: $round;
+            transition: width $move;
+
+            // 粘性定位
+            .sticky {
+                position: sticky;
+                top: 70px;
+            }
+        }
+    }
+}

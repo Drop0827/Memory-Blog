@@ -1,0 +1,58 @@
+// 版心
+$w: 1200px;
+
+// 色彩
+$color: var(--color, #539dfd); // 主色调
+$assistColor: var(--assistColor, #539dfd60); // 辅助色调
+
+// 过渡效果
+$move: 0.3s;
+
+// 圆角效果
+$round: 5px;
+
+// 阴影效果
+$boxShadow: 0 2px 8px rgba(186, 186, 186, 0.15);
+
+// 文字效果
+$fontSty: PingFang SC, "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft YaHei", sans-serif; //文章列表字体
+
+// 文本标题
+$textColor: var(--textColor, #333);
+// 边框
+$borderColor: var(--borderColor, #eee);
+// 下边框
+$underBorderColor: var(--underBorderColor, #eee);
+// 阴影
+$shadeColor: var(--shadeColor, 0 2px 8px rgba(186, 186, 186, 0.15));
+
+// 封装CSS容器样式
+@mixin container {
+    border-radius: 5px;
+    border: 1px solid #eee;
+    transition: all 0.3s;
+
+    &:hover {
+        box-shadow: 0 2px 8px rgba(186, 186, 186, 0.15);
+    }
+}
+
+// 封装右侧模块标题样式
+@mixin titleRight {
+    .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid $underBorderColor;
+        font-size: 17px;
+        font-weight: 400;
+        color: $textColor;
+        transition: all $move;
+
+        img {
+            width: 30px;
+            height: 20px;
+        }
+    }
+}

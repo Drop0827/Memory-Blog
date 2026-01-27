@@ -1,0 +1,31 @@
+// 定义颜色变量
+$ranking-colors: (
+  1: #f83356,
+  2: #faa527,
+  3: #3c83fd,
+  4: #56c357,
+  5: #6756c3
+);
+
+.RandomArticleComponent {
+  .item {
+    background-size: 100%;
+    transition: background-size 0.3s ease; // 添加过渡效果
+
+    // 鼠标经过效果
+    &:hover {
+      background-size: 105%;
+    }
+
+    // 使用循环生成排名样式
+    @each $rank, $color in $ranking-colors {
+      &:nth-of-type(#{$rank}) .ranking {
+        background-color: $color;
+
+        &::after {
+          border-color: transparent transparent transparent $color;
+        }
+      }
+    }
+  }
+}
