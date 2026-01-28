@@ -1,13 +1,18 @@
-import { create } from 'zustand';
-import { User } from '@/types/app/user';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import type { User } from '@/types/app/user'
 
-interface AuthorState {
-  // 作者信息
-  author: User;
-  setAuthor: (data: User) => void;
-}
+const useAuthorStore = defineStore('author', () => {
+  const author = ref<User>({} as User)
 
-export default create<AuthorState>((set) => ({
-  author: {} as User,
-  setAuthor: (data: User) => set(() => ({ author: data })),
-}));
+  function setAuthor(data: User) {
+    author.value = data
+  }
+
+  return {
+    author,
+    setAuthor,
+  }
+})
+
+export default useAuthorStore

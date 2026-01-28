@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { getArticleList, getCategoryList, getTagList, getSwiperList, getAuthorInfo } from '@/api'
 import type { Article } from '@/types/app/article'
 import type { Cate } from '@/types/app/cate'
 import type { Tag } from '@/types/app/tag'
 import type { Swiper } from '@/types/app/swiper'
 import type { User } from '@/types/app/user'
+
+import Starry from '@/components/Starry/index.vue'
+import Typed from '@/components/Typed/index.vue'
+import AppSwiper from '@/components/Swiper/index.vue'
+import AppNavbar from '@/components/Layout/AppNavbar.vue'
+import AppSidebar from '@/components/Layout/AppSidebar.vue'
 
 // 数据状态
 const loading = ref(true)
@@ -14,20 +20,25 @@ const categories = ref<Cate[]>([])
 const tags = ref<Tag[]>([])
 const swipers = ref<Swiper[]>([])
 const author = ref<User | null>(null)
-const error = ref<string>('')
 
-// 分页状态
+// 分页
 const page = ref(1)
 const size = ref(10)
 const total = ref(0)
+const totalPages = computed(() => Math.ceil(total.value / size.value))
+
+// 打字机文本
+const typedStrings = ref([
+  'Keep Hungry, Keep Foolish.',
+  'Code creates the world.',
+  'To be a better man.',
+])
 
 // 加载数据
 const loadData = async () => {
   try {
     loading.value = true
-    error.value = ''
 
-    // 并行加载所有数据
     const [articlesRes, categoriesRes, tagsRes, swipersRes, authorRes] = await Promise.all([
       getArticleList({ page: page.value, size: size.value, isDraft: 0, isDel: 0 }),
       getCategoryList('recursion'),
@@ -36,287 +47,236 @@ const loadData = async () => {
       getAuthorInfo(),
     ])
 
-    // 设置数据（兼容 null 数据为空数组）
-    if (articlesRes.data) {
-      articles.value = articlesRes.data.result || []
-      total.value = articlesRes.data.total || 0
-    }
+    const articleData = articlesRes.data
+    articles.value = articleData.result || []
+    total.value = articleData.total || 0
 
-    categories.value = Array.isArray(categoriesRes?.data) ? categoriesRes.data : []
-    tags.value = Array.isArray(tagsRes?.data) ? tagsRes.data : []
-    swipers.value = Array.isArray(swipersRes?.data) ? swipersRes.data : []
+    categories.value = categoriesRes.data || []
+    tags.value = tagsRes.data || []
+    swipers.value = swipersRes.data || []
     author.value = authorRes.data || null
-  } catch (err: any) {
-    error.value = err.message || '数据加载失败'
-    console.error('加载数据失败：', err)
+  } catch (err) {
+    console.error('Data load failed:', err)
   } finally {
     loading.value = false
   }
 }
 
-// 切换页码
-const changePage = (newPage: number) => {
-  page.value = newPage
+const changePage = (p: number) => {
+  if (p < 1 || p > totalPages.value) return
+  page.value = p
   loadData()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-// 组件挂载时加载数据
 onMounted(() => {
   loadData()
 })
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-    <!-- 顶部导航 -->
-    <header class="bg-black/30 backdrop-blur-md border-b border-gray-700/50 sticky top-0 z-10">
-      <div class="container mx-auto px-6 py-4">
+  <div
+    class="home-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 selection:bg-blue-500 selection:text-white"
+  >
+    <!-- 1. 全局星空背景 -->
+    <Starry />
+
+    <!-- 2. 顶部导航栏 (使用通用组件, 开启透明) -->
+    <AppNavbar :transparent="true" />
+
+    <!-- 3. 首页静态 Hero 区域 (大背景图 + 打字机) -->
+    <div class="relative w-full h-[550px] overflow-hidden group">
+      <!-- 静态背景图 -->
+      <img
+        src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop"
+        class="w-full h-full object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
+        alt="Hero Background"
+      />
+
+      <!-- 遮罩与内容 -->
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 flex flex-col items-center justify-center text-white"
+      >
         <h1
-          class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+          class="text-4xl md:text-6xl font-bold mb-8 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] animate-fade-in-up"
         >
           Memory Blog
         </h1>
-        <p class="text-gray-400 text-sm mt-1">基于后端 API 的博客前端</p>
-      </div>
-    </header>
 
-    <div class="container mx-auto px-6 py-10">
-      <!-- 作者信息卡片 -->
-      <div
-        v-if="author"
-        class="mb-10 p-6 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-2xl border border-gray-700/50 backdrop-blur-sm"
-      >
-        <div class="flex items-center gap-4">
-          <img
-            :src="author.avatar || '/default-avatar.png'"
-            :alt="author.name"
-            class="w-16 h-16 rounded-full border-2 border-purple-400"
-          />
-          <div>
-            <h2 class="text-2xl font-bold">{{ author.name }}</h2>
-            <p class="text-gray-300 mt-1">{{ author.info }}</p>
-            <div class="flex gap-4 mt-2 text-sm text-gray-400">
-              <span v-if="author.email">📧 {{ author.email }}</span>
-              <span v-if="author.username">👤 {{ author.username }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 加载状态 -->
-      <div v-if="loading" class="flex items-center justify-center py-20">
-        <div class="animate-pulse text-blue-400 text-xl">正在加载数据...</div>
-      </div>
-
-      <!-- 错误提示 -->
-      <div
-        v-else-if="error"
-        class="bg-red-900/30 border border-red-500/50 rounded-xl p-6 text-center"
-      >
-        <p class="text-red-300 text-lg">❌ {{ error }}</p>
-        <button
-          @click="loadData"
-          class="mt-4 px-6 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+        <!-- 打字机效果 -->
+        <div
+          class="flex items-center gap-3 text-lg md:text-2xl font-mono bg-white/10 backdrop-blur-md px-8 py-4 rounded-full border border-white/20 shadow-2xl animate-fade-in-up delay-100"
         >
-          重新加载
-        </button>
-      </div>
-
-      <!-- 主要内容 -->
-      <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- 左侧内容区 -->
-        <div class="lg:col-span-3 space-y-8">
-          <!-- 轮播图 -->
-          <section v-if="swipers.length > 0" class="mb-8">
-            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
-              <span class="text-3xl">🎨</span>
-              推荐内容
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                v-for="swiper in swipers.slice(0, 2)"
-                :key="swiper.id"
-                class="relative group overflow-hidden rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition"
-              >
-                <img
-                  :src="swiper.image"
-                  :alt="swiper.title"
-                  class="w-full h-48 object-cover group-hover:scale-110 transition duration-500"
-                />
-                <div
-                  class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
-                >
-                  <h4 class="text-lg font-semibold">{{ swiper.title }}</h4>
-                  <p v-if="swiper.description" class="text-sm text-gray-300 mt-1">
-                    {{ swiper.description }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 文章列表 -->
-          <section>
-            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
-              <span class="text-3xl">📝</span>
-              最新文章
-              <span class="text-sm font-normal text-gray-400">(共 {{ total }} 篇)</span>
-            </h3>
-
-            <div v-if="articles.length === 0" class="text-center py-12 text-gray-400">暂无文章</div>
-
-            <div v-else class="space-y-4">
-              <article
-                v-for="article in articles"
-                :key="article.id"
-                class="p-6 bg-gray-800/50 rounded-xl border border-gray-700/50 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 transition group"
-              >
-                <div class="flex gap-4">
-                  <!-- 文章封面 -->
-                  <div v-if="article.cover" class="flex-shrink-0">
-                    <img
-                      :src="article.cover"
-                      :alt="article.title"
-                      class="w-32 h-32 object-cover rounded-lg"
-                    />
-                  </div>
-
-                  <!-- 文章信息 -->
-                  <div class="flex-1">
-                    <h4 class="text-xl font-bold group-hover:text-blue-400 transition">
-                      {{ article.title }}
-                    </h4>
-
-                    <p v-if="article.description" class="text-gray-400 mt-2 line-clamp-2">
-                      {{ article.description }}
-                    </p>
-
-                    <!-- 分类和标签 -->
-                    <div class="flex flex-wrap gap-2 mt-3">
-                      <span
-                        v-for="cate in article.cateList?.slice(0, 3)"
-                        :key="cate.id"
-                        class="px-3 py-1 text-xs bg-purple-900/30 text-purple-300 rounded-full border border-purple-500/30"
-                      >
-                        {{ cate.name }}
-                      </span>
-                      <span
-                        v-for="tag in article.tagList?.slice(0, 3)"
-                        :key="tag.id"
-                        class="px-3 py-1 text-xs bg-blue-900/30 text-blue-300 rounded-full border border-blue-500/30"
-                      >
-                        # {{ tag.name }}
-                      </span>
-                    </div>
-
-                    <!-- 底部信息 -->
-                    <div class="flex items-center gap-4 mt-4 text-sm text-gray-400">
-                      <span
-                        >📅 {{ new Date(Number(article.createTime)).toLocaleDateString() }}</span
-                      >
-                      <span v-if="article.view">👀 {{ article.view }} 次阅读</span>
-                      <span v-if="article.comment">💬 {{ article.comment }} 条评论</span>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-
-            <!-- 分页 -->
-            <div v-if="total > size" class="mt-8 flex justify-center gap-2">
-              <button
-                v-for="p in Math.ceil(total / size)"
-                :key="p"
-                @click="changePage(p)"
-                class="px-4 py-2 rounded-lg transition"
-                :class="
-                  p === page
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                "
-              >
-                {{ p }}
-              </button>
-            </div>
-          </section>
+          <span class="animate-pulse">🚀</span>
+          <span class="text-gray-200">Welcome:</span>
+          <Typed
+            :strings="typedStrings"
+            :typeSpeed="80"
+            :backSpeed="50"
+            :loop="true"
+            className="font-bold text-blue-300"
+          />
         </div>
 
-        <!-- 右侧边栏 -->
-        <aside class="space-y-6">
-          <!-- 分类列表 -->
-          <section class="p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span class="text-2xl">📚</span>
-              分类
-            </h3>
-            <div v-if="categories.length === 0" class="text-gray-400 text-sm">暂无分类</div>
-            <ul v-else class="space-y-2">
-              <li
-                v-for="cate in categories.slice(0, 10)"
-                :key="cate.id"
-                class="flex items-center justify-between p-2 rounded hover:bg-gray-700/50 transition cursor-pointer"
-              >
-                <span class="flex items-center gap-2">
-                  <span v-if="cate.icon">{{ cate.icon }}</span>
-                  {{ cate.name }}
-                </span>
-                <span v-if="cate.children?.length" class="text-xs text-gray-500">
-                  {{ cate.children.length }}
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- 标签云 -->
-          <section class="p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span class="text-2xl">🏷️</span>
-              标签
-            </h3>
-            <div v-if="tags.length === 0" class="text-gray-400 text-sm">暂无标签</div>
-            <div v-else class="flex flex-wrap gap-2">
-              <span
-                v-for="tag in tags.slice(0, 20)"
-                :key="tag.id"
-                class="px-3 py-1 text-sm bg-blue-900/20 text-blue-300 rounded-full border border-blue-500/30 hover:bg-blue-900/40 transition cursor-pointer"
-              >
-                {{ tag.name }}
-                <span v-if="tag.count" class="ml-1 text-xs text-gray-500">({{ tag.count }})</span>
-              </span>
-            </div>
-          </section>
-
-          <!-- API 状态 -->
-          <section class="p-6 bg-green-900/20 rounded-xl border border-green-500/30">
-            <h3 class="text-xl font-bold mb-2 text-green-400">✅ API 连接成功</h3>
-            <p class="text-sm text-gray-300">成功连接到后端 API</p>
-            <div class="mt-4 text-xs text-gray-400 space-y-1">
-              <div>• 文章数量: {{ total }}</div>
-              <div>• 分类数量: {{ categories.length }}</div>
-              <div>• 标签数量: {{ tags.length }}</div>
-              <div>• 轮播图: {{ swipers.length }}</div>
-            </div>
-          </section>
-        </aside>
+        <!-- 向下滚动提示 -->
+        <div class="absolute bottom-8 animate-bounce text-white/50">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
       </div>
     </div>
 
-    <!-- 底部 -->
-    <footer class="mt-20 py-8 border-t border-gray-700/50 text-center text-gray-400">
-      <p class="text-sm">Powered by Memory Blog | Vue 3 + Spring Boot 3</p>
-      <p class="text-xs mt-2">
-        API 文档请查看项目根目录的 <code class="text-blue-400">API使用文档.md</code>
-      </p>
-    </footer>
+    <!-- 4. 内容区 -->
+    <div class="container mx-auto px-4 lg:px-12 xl:px-32 max-w-7xl py-12 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- 左侧 (占 9 列) -->
+        <main class="lg:col-span-9 space-y-8">
+          <!-- 轮播图 (作为内容的一部分展示) -->
+          <div
+            v-if="swipers.length"
+            class="animate-fade-in-up shadow-2xl rounded-2xl overflow-hidden border border-white/20"
+          >
+            <AppSwiper :data="swipers" />
+          </div>
+          <!-- 文章列表标题 -->
+          <div
+            class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700/50 pb-4 mb-8 mt-12"
+          >
+            <h2 class="text-2xl font-bold flex items-center gap-2">
+              <span class="text-3xl">📝</span> 最新文章
+            </h2>
+            <span class="text-gray-400 text-sm">共 {{ total }} 篇</span>
+          </div>
+
+          <div v-if="loading" class="text-center py-20 text-gray-500 animate-pulse">
+            正在加载精彩内容...
+          </div>
+
+          <!-- 文章卡片列表 -->
+          <div v-else class="space-y-6">
+            <article
+              v-for="(article, index) in articles"
+              :key="article.id"
+              class="group relative bg-white/80 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row h-auto md:h-64"
+            >
+              <!-- 封面图 -->
+              <div class="w-full md:w-2/5 h-48 md:h-full overflow-hidden relative">
+                <img
+                  :src="
+                    article.cover ||
+                    'https://images.unsplash.com/photo-1499750310159-5b5f2269a2d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                  "
+                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+                  <span
+                    v-for="cate in article.cateList"
+                    :key="cate.id"
+                    class="px-3 py-1 text-xs font-bold bg-blue-600/90 text-white rounded-lg backdrop-blur-sm shadow-lg"
+                  >
+                    {{ cate.name }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- 内容 -->
+              <div class="flex-1 p-6 flex flex-col justify-between">
+                <div>
+                  <div
+                    class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3"
+                  >
+                    <span class="flex items-center gap-1"
+                      >📅 {{ new Date(Number(article.createTime)).toLocaleDateString() }}</span
+                    >
+                    <span class="flex items-center gap-1">👀 {{ article.view }}</span>
+                    <span class="flex items-center gap-1">💬 {{ article.comment }}</span>
+                  </div>
+                  <h3
+                    class="text-xl font-bold text-gray-800 dark:text-white mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
+                  >
+                    {{ article.title }}
+                  </h3>
+                  <p
+                    class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4"
+                  >
+                    {{ article.description || '暂无描述...' }}
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between mt-auto">
+                  <div class="flex gap-2">
+                    <span
+                      v-for="tag in article.tagList"
+                      :key="tag.id"
+                      class="text-xs text-blue-500/80 dark:text-blue-300/80"
+                      >#{{ tag.name }}</span
+                    >
+                  </div>
+                  <button
+                    class="px-4 py-1.5 text-xs font-bold bg-blue-50 dark:bg-transparent border border-blue-500/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
+                  >
+                    阅读全文
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- 分页 -->
+          <div v-if="totalPages > 1" class="flex justify-center mt-12 gap-2">
+            <button
+              @click="changePage(page - 1)"
+              :disabled="page === 1"
+              class="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-blue-50 dark:hover:bg-gray-700 transition"
+            >
+              上一页
+            </button>
+            <span class="px-4 py-2 text-blue-500 font-bold">{{ page }} / {{ totalPages }}</span>
+            <button
+              @click="changePage(page + 1)"
+              :disabled="page === totalPages"
+              class="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-blue-50 dark:hover:bg-gray-700 transition"
+            >
+              下一页
+            </button>
+          </div>
+        </main>
+
+        <!-- 右侧边栏 (占 3 列) -->
+        <aside class="lg:col-span-3">
+          <!-- 复用通用侧边栏 -->
+          <AppSidebar :author="author" :categories="categories" :tags="tags" />
+        </aside>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

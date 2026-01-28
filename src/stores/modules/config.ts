@@ -1,43 +1,81 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { Other, Theme, Web } from '@/types/app/config';
+import { defineStore } from 'pinia'
+import { ref, watch } from 'vue'
+import type { Other, Theme, Web } from '@/types/app/config'
 
-interface ConfigState {
-  // 是否暗黑模式
-  isDark: boolean;
-  setIsDark: (status: boolean) => void;
+const useConfigStore = defineStore('config', () => {
+  // Persistence logic
+  const STORAGE_KEY = 'config_storage'
 
-  // 网站配置
-  web: Web;
-  setWeb: (data: Web) => void;
+  // Default values
+  let initialIsDark = false
+  let initialWeb = {} as Web
+  let initialTheme = {} as Theme
+  let initialOther = {} as Other
 
-  // 主题配置
-  theme: Theme;
-  setTheme: (data: Theme) => void;
+  // Try to load from localStorage
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      // Handle Zustand persist format { state: { ... }, version: 0 } or plain object
+      const state = parsed.state || parsed
 
-  // 其他配置
-  other: Other;
-  setOther: (data: Other) => void;
-}
-
-export default create(
-  persist<ConfigState>(
-    (set) => ({
-      isDark: false,
-      setIsDark: (status: boolean) => set(() => ({ isDark: status })),
-
-      web: {} as Web,
-      setWeb: (data: Web) => set(() => ({ web: data })),
-
-      theme: {} as Theme,
-      setTheme: (data: Theme) => set(() => ({ theme: data })),
-
-      other: {} as Other,
-      setOther: (data: Other) => set(() => ({ other: data }))
-    }),
-    {
-      name: 'config_storage',
-      storage: createJSONStorage(() => localStorage)
+      if (state.isDark !== undefined) initialIsDark = state.isDark
+      if (state.web) initialWeb = state.web
+      if (state.theme) initialTheme = state.theme
+      if (state.other) initialOther = state.other
     }
+  } catch (e) {
+    console.error('Failed to load config from storage', e)
+  }
+
+  const isDark = ref<boolean>(initialIsDark)
+  const web = ref<Web>(initialWeb)
+  const theme = ref<Theme>(initialTheme)
+  const other = ref<Other>(initialOther)
+
+  function setIsDark(status: boolean) {
+    isDark.value = status
+  }
+
+  function setWeb(data: Web) {
+    web.value = data
+  }
+
+  function setTheme(data: Theme) {
+    theme.value = data
+  }
+
+  function setOther(data: Other) {
+    other.value = data
+  }
+
+  // Setup Watcher for Persistence
+  watch(
+    [isDark, web, theme, other],
+    () => {
+      const state = {
+        isDark: isDark.value,
+        web: web.value,
+        theme: theme.value,
+        other: other.value,
+      }
+      // Save in structure compatible with how we read it (and legacy Zustand format)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, version: 0 }))
+    },
+    { deep: true },
   )
-)
+
+  return {
+    isDark,
+    setIsDark,
+    web,
+    setWeb,
+    theme,
+    setTheme,
+    other,
+    setOther,
+  }
+})
+
+export default useConfigStore

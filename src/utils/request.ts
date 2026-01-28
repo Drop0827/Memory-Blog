@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
 
 // 从环境变量中获取后端 API 地址
 const BASE_URL = import.meta.env.VITE_PROJECT_API || 'http://localhost:8080/api'
@@ -69,23 +69,30 @@ export default async <T>(
 }
 
 // 导出常用的请求方法
+// 导出常用的请求方法
 export const get = <T>(url: string, params?: any, config?: AxiosRequestConfig) =>
-  request.get<any, ResponseData<T>>(url, { params, ...config })
+  request
+    .get<any, AxiosResponse<ResponseData<T>>>(url, { params, ...config })
+    .then((res) => res.data)
 
 export const post = <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-  request.post<any, ResponseData<T>>(url, data, config)
+  request.post<any, AxiosResponse<ResponseData<T>>>(url, data, config).then((res) => res.data)
 
 export const patch = <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-  request.patch<any, ResponseData<T>>(url, data, config)
+  request.patch<any, AxiosResponse<ResponseData<T>>>(url, data, config).then((res) => res.data)
 
 export const del = <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
-  request.delete<any, ResponseData<T>>(url, { data, ...config })
+  request
+    .delete<any, AxiosResponse<ResponseData<T>>>(url, { data, ...config })
+    .then((res) => res.data)
 
 // 文件上传专用方法
 export const upload = async <T>(url: string, formData: FormData): Promise<ResponseData<T>> => {
-  return request.post(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
+  return request
+    .post<any, AxiosResponse<ResponseData<T>>>(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res) => res.data)
 }

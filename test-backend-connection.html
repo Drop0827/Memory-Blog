@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>后端连接检测工具</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 800px;
+        width: 100%;
+        padding: 40px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 28px;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 14px;
+      }
+
+      .test-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .test-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .test-button:active {
+        transform: translateY(0);
+      }
+
+      .test-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .results {
+        margin-top: 20px;
+      }
+
+      .test-item {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 4px solid #ddd;
+        transition: all 0.3s ease;
+      }
+
+      .test-item.success {
+        border-left-color: #28a745;
+        background: #d4edda;
+      }
+
+      .test-item.error {
+        border-left-color: #dc3545;
+        background: #f8d7da;
+      }
+
+      .test-item.loading {
+        border-left-color: #ffc107;
+        background: #fff3cd;
+      }
+
+      .test-item h3 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-icon {
+        font-size: 20px;
+      }
+
+      .test-item pre {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 10px;
+      }
+
+      .summary {
+        background: #e7f3ff;
+        border: 2px solid #2196f3;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .summary h2 {
+        color: #1976d2;
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .summary ul {
+        list-style: none;
+      }
+
+      .summary li {
+        padding: 8px 0;
+        color: #333;
+      }
+
+      .summary li::before {
+        content: '✓ ';
+        color: #28a745;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #667eea;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 Memory Blog 后端连接检测</h1>
+      <p class="subtitle">检测前端与后端服务的连接状态</p>
+
+      <button class="test-button" id="startTest">开始检测</button>
+
+      <div class="results" id="results"></div>
+    </div>
+
+    <script>
+      const API_BASE = 'http://localhost:8080/api'
+      const resultsDiv = document.getElementById('results')
+      const startBtn = document.getElementById('startTest')
+
+      // 测试项目配置
+      const tests = [
+        {
+          name: '检测后端服务器',
+          url: `${API_BASE}/article/list?page=1&size=1`,
+          method: 'GET',
+          description: '测试后端服务是否运行',
+        },
+        {
+          name: '获取文章列表',
+          url: `${API_BASE}/article/list?page=1&size=5&isDraft=0&isDel=0`,
+          method: 'GET',
+          description: '测试文章 API 是否正常',
+        },
+        {
+          name: '获取分类列表',
+          url: `${API_BASE}/cate/list?pattern=recursion`,
+          method: 'GET',
+          description: '测试分类 API 是否正常',
+        },
+        {
+          name: '获取标签列表',
+          url: `${API_BASE}/tag/list`,
+          method: 'GET',
+          description: '测试标签 API 是否正常',
+        },
+        {
+          name: '获取轮播图',
+          url: `${API_BASE}/swiper/list`,
+          method: 'GET',
+          description: '测试轮播图 API 是否正常',
+        },
+      ]
+
+      startBtn.addEventListener('click', runTests)
+
+      async function runTests() {
+        resultsDiv.innerHTML = ''
+        startBtn.disabled = true
+        startBtn.textContent = '检测中...'
+
+        const results = []
+
+        for (const test of tests) {
+          const result = await runTest(test)
+          results.push(result)
+        }
+
+        // 显示总结
+        showSummary(results)
+
+        startBtn.disabled = false
+        startBtn.textContent = '重新检测'
+      }
+
+      async function runTest(test) {
+        const testItem = createTestItem(test.name, 'loading')
+        resultsDiv.appendChild(testItem)
+
+        try {
+          const startTime = Date.now()
+          const response = await fetch(test.url, {
+            method: test.method,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+
+          const duration = Date.now() - startTime
+          const data = await response.json()
+
+          if (response.ok && data.code === 200) {
+            updateTestItem(testItem, 'success', {
+              status: response.status,
+              message: data.message || '成功',
+              duration: `${duration}ms`,
+              dataCount: Array.isArray(data.data)
+                ? data.data.length
+                : data.data?.result
+                  ? data.data.result.length
+                  : '数据已返回',
+              data: JSON.stringify(data, null, 2),
+            })
+            return { name: test.name, success: true }
+          } else {
+            throw new Error(`API 返回错误: ${data.message || response.statusText}`)
+          }
+        } catch (error) {
+          updateTestItem(testItem, 'error', {
+            error: error.message,
+            details: error.stack,
+          })
+          return { name: test.name, success: false, error: error.message }
+        }
+      }
+
+      function createTestItem(name, status) {
+        const div = document.createElement('div')
+        div.className = `test-item ${status}`
+        div.innerHTML = `
+                <h3>
+                    <span class="status-icon">${status === 'loading' ? '<span class="loading-spinner"></span>' : '⏳'}</span>
+                    ${name}
+                </h3>
+                <p>检测中...</p>
+            `
+        return div
+      }
+
+      function updateTestItem(item, status, data) {
+        item.className = `test-item ${status}`
+
+        if (status === 'success') {
+          item.innerHTML = `
+                    <h3>
+                        <span class="status-icon">✅</span>
+                        ${item.querySelector('h3').textContent.replace('⏳', '').trim()}
+                    </h3>
+                    <p><strong>状态:</strong> ${data.status} - ${data.message}</p>
+                    <p><strong>响应时间:</strong> ${data.duration}</p>
+                    <p><strong>数据量:</strong> ${data.dataCount}</p>
+                    <pre>${data.data.substring(0, 500)}${data.data.length > 500 ? '...' : ''}</pre>
+                `
+        } else {
+          item.innerHTML = `
+                    <h3>
+                        <span class="status-icon">❌</span>
+                        ${item.querySelector('h3').textContent.replace('⏳', '').trim()}
+                    </h3>
+                    <p><strong>错误:</strong> ${data.error}</p>
+                    ${data.details ? `<pre>${data.details}</pre>` : ''}
+                `
+        }
+      }
+
+      function showSummary(results) {
+        const successCount = results.filter((r) => r.success).length
+        const totalCount = results.length
+
+        const summaryDiv = document.createElement('div')
+        summaryDiv.className = 'summary'
+        summaryDiv.innerHTML = `
+                <h2>📊 检测总结</h2>
+                <ul>
+                    <li>总测试项: ${totalCount}</li>
+                    <li>成功: ${successCount}</li>
+                    <li>失败: ${totalCount - successCount}</li>
+                    <li>成功率: ${((successCount / totalCount) * 100).toFixed(1)}%</li>
+                </ul>
+                ${
+                  successCount === totalCount
+                    ? '<p style="color: #28a745; font-weight: bold; margin-top: 15px;">🎉 所有测试通过！前后端连接正常！</p>'
+                    : '<p style="color: #dc3545; font-weight: bold; margin-top: 15px;">⚠️ 部分测试失败，请检查后端服务和配置</p>'
+                }
+            `
+        resultsDiv.appendChild(summaryDiv)
+      }
+
+      // 页面加载时自动运行一次
+      window.addEventListener('load', () => {
+        setTimeout(runTests, 500)
+      })
+    </script>
+  </body>
+</html>
