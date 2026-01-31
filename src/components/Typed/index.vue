@@ -16,7 +16,8 @@ let charIndex = 0
 let isDeleting = false
 
 const type = () => {
-  const currentString = props.strings[stringIndex % props.strings.length]
+  if (!props.strings?.length) return
+  const currentString = props.strings[stringIndex % props.strings.length] || ''
   const speed = isDeleting ? props.backSpeed || 30 : props.typeSpeed || 100
 
   if (!textElement.value) return

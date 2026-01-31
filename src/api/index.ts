@@ -308,7 +308,7 @@ export const getCommentPaging = (
   filterData?: any,
 ) => {
   const { page = 1, size = 10 } = params
-  return post('/comment/paging', filterData, { params: { page, size } })
+  return post<Paginate<Comment[]>>('/comment/paging', filterData, { params: { page, size } })
 }
 
 /**
