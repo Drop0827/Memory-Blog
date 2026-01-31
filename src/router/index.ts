@@ -1,6 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+import Img1 from '@/assets/image/1.jpg'
+import Img3 from '@/assets/image/3.png'
+import Img4 from '@/assets/image/4.jpg'
+import Img5 from '@/assets/image/5.jpg'
+
+const contrastImgs = [Img1, Img3, Img4, Img5]
+
+const getRandomImage = () => {
+  const index = Math.floor(Math.random() * contrastImgs.length)
+  return contrastImgs[index]
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -15,8 +27,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '开发笔记',
-        coverImage:
-          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2670&auto=format&fit=crop',
+        coverImage: getRandomImage(),
       },
     },
     {
@@ -25,8 +36,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '生活随笔',
-        coverImage:
-          'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2670&auto=format&fit=crop',
+        coverImage: getRandomImage(),
       },
     },
     {
@@ -35,8 +45,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '大学生活',
-        coverImage:
-          'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2670&auto=format&fit=crop',
+        coverImage: getRandomImage(),
       },
     },
     {
@@ -45,14 +54,63 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '开发历程',
-        coverImage:
-          'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2668&auto=format&fit=crop',
+        coverImage: getRandomImage(),
       },
     },
     {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/friends',
+      name: 'friends',
+      component: () => import('../views/FriendsView.vue'),
+    },
+    {
+      path: '/fishpond',
+      name: 'fishpond',
+      component: () => import('../views/FishpondView.vue'),
+    },
+    {
+      path: '/wall',
+      name: 'wall',
+      component: () => import('../views/WallView.vue'),
+    },
+    {
+      path: '/moments',
+      name: 'moments',
+      component: () => import('../views/MomentsView.vue'),
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: () => import('../views/ColumnView.vue'),
+      props: { title: '网站统计', coverImage: getRandomImage() },
+    },
+    {
+      path: '/footprints',
+      name: 'footprints',
+      component: () => import('../views/ColumnView.vue'),
+      props: { title: '我的足迹', coverImage: getRandomImage() },
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: () => import('../views/ColumnView.vue'),
+      props: { title: '标签云', coverImage: getRandomImage() },
+    },
+    {
+      path: '/devices',
+      name: 'devices',
+      component: () => import('../views/ColumnView.vue'),
+      props: { title: '我的设备', coverImage: getRandomImage() },
+    },
+    {
+      path: '/resume',
+      name: 'resume',
+      component: () => import('../views/ColumnView.vue'),
+      props: { title: '我的履历', coverImage: getRandomImage() },
     },
   ],
 })

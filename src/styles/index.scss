@@ -1,22 +1,30 @@
-@use "./fun.scss";
+@use './fun.scss';
+
+@font-face {
+  font-family: 'LXGW WenKai';
+  src: url('../assets/font/LXGWWenKai-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 html.dark {
-    // 闪念编辑器主题
-    --w-e-textarea-color: #fff;
+  // 闪念编辑器主题
+  --w-e-textarea-color: #fff;
 }
 
 body {
-    background-color: #f9f9f9;
-    font-weight: normal;
+  background-color: #f9f9f9;
+  font-weight: normal;
 
-    // 霞鹜文楷
-    // font-family: "LXGW WenKai";
+  // 霞鹜文楷
+  font-family: 'LXGW WenKai', sans-serif;
 
-    // 原俠正楷
-    // font-family:'GuanKiapTsingKhai';
+  // 原俠正楷
+  // font-family:'GuanKiapTsingKhai';
 
-    // 悠哉
-    // font-family:'Yozai Medium';
+  // 悠哉
+  // font-family:'Yozai Medium';
 }
 
 /* 滚动条槽 */
@@ -27,136 +35,136 @@ body {
 
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #539dfd, #86b5f2);
-    height: 50px;
-    outline-offset: -2px;
-    outline: 2px solid #ffffff00;
-    -webkit-border-radius: 4px;
-    border: 2px solid #ffffff00;
+  background: linear-gradient(to bottom, #539dfd, #86b5f2);
+  height: 50px;
+  outline-offset: -2px;
+  outline: 2px solid #ffffff00;
+  -webkit-border-radius: 4px;
+  border: 2px solid #ffffff00;
 }
 
 /* 为整个页面设置滚动条样式 */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+  width: 0;
+  height: 0;
 }
 
 // 文字阴影
 .custom_text_shadow {
-    text-shadow: 0 0.1875rem 0.3125rem #1c1f21;
+  text-shadow: 0 0.1875rem 0.3125rem #1c1f21;
 }
 
 // 头像动画效果
 .avatar-animation {
-    animation: 5s linear infinite miniShape;
+  animation: 5s linear infinite miniShape;
 }
 
 @keyframes miniShape {
-    0%,
-    100% {
-        border-radius: 42% 58% 70% 30%/45% 45% 55% 55%;
-        transform: translate3d(0, 0, 0) rotateZ(0.01deg);
-    }
+  0%,
+  100% {
+    border-radius: 42% 58% 70% 30%/45% 45% 55% 55%;
+    transform: translate3d(0, 0, 0) rotateZ(0.01deg);
+  }
 
-    34% {
-        border-radius: 70% 30% 46% 54%/30% 29% 71% 70%;
-        transform: translate3d(0, 5px, 0) rotateZ(0.01deg);
-    }
+  34% {
+    border-radius: 70% 30% 46% 54%/30% 29% 71% 70%;
+    transform: translate3d(0, 5px, 0) rotateZ(0.01deg);
+  }
 
-    50% {
-        transform: translate3d(0, 0, 0) rotateZ(0.01deg);
-    }
+  50% {
+    transform: translate3d(0, 0, 0) rotateZ(0.01deg);
+  }
 
-    67% {
-        border-radius: 100% 60% 60% 100%/100% 100% 60% 60%;
-        transform: translate3d(0, -3px, 0) rotateZ(0.01deg);
-    }
+  67% {
+    border-radius: 100% 60% 60% 100%/100% 100% 60% 60%;
+    transform: translate3d(0, -3px, 0) rotateZ(0.01deg);
+  }
 }
 
 // 文本标记样式
 .text_markSty {
-    position: relative;
+  position: relative;
 
-    &::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 50%;
-        height: 10px;
-        background-color: #539dfd80;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 50%;
+    height: 10px;
+    background-color: #539dfd80;
+  }
 }
 
 // 文字阴影效果
 .text_shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 // 位移动画效果
 .animation_bottom {
-    animation: animation_bottom 0.7s linear;
+  animation: animation_bottom 0.7s linear;
 }
 
 @keyframes animation_bottom {
-    0% {
-        bottom: 0;
-    }
+  0% {
+    bottom: 0;
+  }
 
-    100% {
-        bottom: 28px;
-    }
+  100% {
+    bottom: 28px;
+  }
 }
 
 /* 隐藏滚动条 */
 .hide_sliding::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+  width: 0;
+  height: 0;
 }
 
 // 留言墙卡片淡入动画
 @keyframes fade-in-up-opacity {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fade-in-up-transform {
-    from {
-        transform: translateY(20px);
-    }
-    to {
-        transform: translateY(0);
-    }
+  from {
+    transform: translateY(20px);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in-up {
-    // 只对 opacity 使用 forwards，transform 动画结束后不锁定
-    animation: 
-        fade-in-up-opacity 0.6s ease-out forwards,
-        fade-in-up-transform 0.6s ease-out;
-    // 确保 transform 在动画结束后可以被 hover 覆盖
+  // 只对 opacity 使用 forwards，transform 动画结束后不锁定
+  animation:
+    fade-in-up-opacity 0.6s ease-out forwards,
+    fade-in-up-transform 0.6s ease-out;
+  // 确保 transform 在动画结束后可以被 hover 覆盖
 }
 
 // 瀑布流布局
 .masonry-grid {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    width: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
 }
 
 .masonry-grid_column {
-    padding-left: 10px;
-    background-clip: padding-box;
+  padding-left: 10px;
+  background-clip: padding-box;
 }
 
 // 渐变背景

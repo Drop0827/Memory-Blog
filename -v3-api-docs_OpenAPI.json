@@ -1,0 +1,7149 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Memory 博客系统 - 在线API文档",
+    "description": "基于 Spring Boot 3 + Vue 3 的全栈博客系统接口文档",
+    "contact": {
+      "name": "OHH",
+      "url": "https://github.com/Drop0827/Memory-Server",
+      "email": "2720751424@qq.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "v1.0.0"
+  },
+  "externalDocs": {
+    "description": "Memory 项目文档",
+    "url": "https://github.com/Drop0827/Memory-Server"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/wall": {
+      "post": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "新增留言",
+        "operationId": "add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Wall"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "编辑留言",
+        "operationId": "edit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Wall"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/wall/paging": {
+      "post": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "分页查询留言列表",
+        "operationId": "paging",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WallFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/wall/list": {
+      "post": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "获取留言列表",
+        "operationId": "list",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WallFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListWall"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/wall/cate/{cateId}": {
+      "post": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "获取指定分类中所有留言",
+        "operationId": "getCateWallList",
+        "parameters": [
+          {
+            "name": "cateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/user": {
+      "post": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "新增用户",
+        "operationId": "add_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "编辑用户",
+        "operationId": "edit_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInfoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/user/paging": {
+      "post": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "分页查询用户列表",
+        "operationId": "paging_1",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "根据关键词进行筛选",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "根据关键词进行筛选"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "根据开始时间进行筛选",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "根据开始时间进行筛选"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "根据结束时间进行筛选",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "根据结束时间进行筛选"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "用户登录",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/user/list": {
+      "post": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "获取用户列表",
+        "operationId": "list_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListUser"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/tag": {
+      "post": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "新增标签",
+        "operationId": "add_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "编辑标签",
+        "operationId": "edit_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/tag/paging": {
+      "post": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "分页查询标签列表",
+        "operationId": "paging_2",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/tag/list": {
+      "post": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "获取标签列表",
+        "operationId": "list_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListTag"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/swiper": {
+      "post": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "新增轮播图",
+        "operationId": "add_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Swiper"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "编辑轮播图",
+        "operationId": "edit_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Swiper"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/swiper/paging": {
+      "post": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "分页查询轮播图列表",
+        "operationId": "paging_3",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/swiper/list": {
+      "post": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "获取轮播图列表",
+        "operationId": "list_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListSwiper"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/rss/paging": {
+      "post": {
+        "tags": [
+          "订阅管理"
+        ],
+        "summary": "分页查询订阅内容",
+        "operationId": "paging_4",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/record": {
+      "post": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "新增说说",
+        "operationId": "add_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Record"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "编辑说说",
+        "operationId": "edit_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Record"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/record/paging": {
+      "post": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "分页查询说说列表",
+        "operationId": "paging_5",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/record/list": {
+      "post": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "获取说说列表",
+        "operationId": "list_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListRecord"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/oss": {
+      "post": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "新增oss配置",
+        "operationId": "add_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Oss"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "更新oss配置",
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Oss"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 3
+      }
+    },
+    "/api/oss/list": {
+      "post": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "获取oss配置列表",
+        "operationId": "page",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 5
+      }
+    },
+    "/api/link": {
+      "post": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "新增网站",
+        "operationId": "add_6",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Link"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "编辑网站",
+        "operationId": "edit_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Link"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/link/paging": {
+      "post": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "分页查询网站列表",
+        "operationId": "paging_6",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/link/list": {
+      "post": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "获取网站列表",
+        "operationId": "list_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListLink"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/footprint": {
+      "post": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "新增足迹",
+        "operationId": "add_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Footprint"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "编辑足迹",
+        "operationId": "edit_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Footprint"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/footprint/list": {
+      "post": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "获取足迹列表",
+        "operationId": "list_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListFootprint"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/file": {
+      "post": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "文件上传",
+        "operationId": "add_8",
+        "parameters": [
+          {
+            "name": "dir",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "files",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "delete": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "删除文件",
+        "operationId": "del_8",
+        "parameters": [
+          {
+            "name": "filePath",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/email/reply_wall": {
+      "post": {
+        "tags": [
+          "邮件管理"
+        ],
+        "summary": "回复留言",
+        "operationId": "replyWall",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WallEmailDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/email/dismiss": {
+      "post": {
+        "tags": [
+          "邮件管理"
+        ],
+        "summary": "驳回通知邮件",
+        "operationId": "dismiss",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DismissEmailDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      }
+    },
+    "/api/comment": {
+      "post": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "新增评论",
+        "operationId": "add_9",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "编辑评论",
+        "operationId": "edit_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/comment/paging": {
+      "post": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "分页查询评论列表",
+        "operationId": "paging_7",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/comment/list": {
+      "post": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "获取评论列表",
+        "operationId": "list_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentFilterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListComment"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/comment/article/{articleId}": {
+      "post": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "获取指定文章中所有评论",
+        "operationId": "getArticleCommentList",
+        "parameters": [
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/cate": {
+      "post": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "新增分类",
+        "operationId": "add_10",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CateFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "编辑分类",
+        "operationId": "edit_8",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CateFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/cate/paging": {
+      "post": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "分页查询分类列表",
+        "operationId": "paging_8",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/cate/list": {
+      "post": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "获取分类列表",
+        "operationId": "list_8",
+        "parameters": [
+          {
+            "name": "pattern",
+            "in": "query",
+            "description": "默认为tree树性结构，设置为list表示列表结构",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "recursion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListCate"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/assistant": {
+      "post": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "新增助手",
+        "operationId": "add_11",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assistant"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "编辑助手",
+        "operationId": "edit_9",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assistant"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/assistant/list": {
+      "post": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "获取助手列表",
+        "operationId": "list_9",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListAssistant"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/article": {
+      "post": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "新增文章",
+        "operationId": "add_12",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 1
+      },
+      "patch": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "编辑文章",
+        "operationId": "edit_10",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleFormDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 5
+      }
+    },
+    "/api/article/paging": {
+      "post": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "分页查询文章列表",
+        "operationId": "paging_9",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleFillterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 8
+      }
+    },
+    "/api/article/list": {
+      "post": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "获取文章列表",
+        "operationId": "list_10",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleFillterVo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListArticle"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 7
+      }
+    },
+    "/api/article/import": {
+      "post": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "批量导入文章",
+        "operationId": "importArticle",
+        "parameters": [
+          {
+            "name": "list",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 14
+      }
+    },
+    "/api/article/export": {
+      "post": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "批量导出文章",
+        "operationId": "exportArticle",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 15
+      }
+    },
+    "/api/web_config/json/{id}": {
+      "patch": {
+        "tags": [
+          "网站配置管理"
+        ],
+        "summary": "根据ID更新网站配置",
+        "operationId": "updateJsonValue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/web_config/json/name/{name}": {
+      "patch": {
+        "tags": [
+          "网站配置管理"
+        ],
+        "summary": "根据名称更新网站配置",
+        "operationId": "updateJsonValueByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      }
+    },
+    "/api/wall/choice/{id}": {
+      "patch": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "设置与取消精选留言",
+        "operationId": "updateChoice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 11
+      }
+    },
+    "/api/wall/audit/{id}": {
+      "patch": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "审核指定留言",
+        "operationId": "auditWall",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 10
+      }
+    },
+    "/api/user/pass": {
+      "patch": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "修改用户密码",
+        "operationId": "editPass",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditPassDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 9
+      }
+    },
+    "/api/page_config/json/{id}": {
+      "patch": {
+        "tags": [
+          "页面配置管理"
+        ],
+        "summary": "根据ID更新页面配置",
+        "operationId": "updateJsonValue_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "页面配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "description": "JSON配置值"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/oss/enable/{id}": {
+      "patch": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "启用oss配置",
+        "operationId": "enable",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 6
+      }
+    },
+    "/api/link/audit/{id}": {
+      "patch": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "审核指定网站",
+        "operationId": "auditWeb",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 9
+      }
+    },
+    "/api/env_config/{id}/field/{fieldName}": {
+      "patch": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "根据ID更新配置",
+        "operationId": "updateJsonFieldValue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "环境配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          },
+          {
+            "name": "fieldName",
+            "in": "path",
+            "description": "字段名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "host"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "字段值"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 6
+      }
+    },
+    "/api/env_config/json/{id}": {
+      "patch": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "根据ID获取配置",
+        "operationId": "updateJsonValue_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "环境配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "description": "JSON配置值"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/comment/audit/{id}": {
+      "patch": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "审核指定评论",
+        "operationId": "auditComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 9
+      }
+    },
+    "/api/assistant/default/{id}": {
+      "patch": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "设置默认助手",
+        "operationId": "selectDefault",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/article/reduction/{id}": {
+      "patch": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "还原被删除的文章",
+        "operationId": "reduction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 3
+      }
+    },
+    "/api/web_config/{id}": {
+      "get": {
+        "tags": [
+          "网站配置管理"
+        ],
+        "summary": "根据ID获取网站配置",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultWebConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/web_config/name/{name}": {
+      "get": {
+        "tags": [
+          "网站配置管理"
+        ],
+        "summary": "根据名称获取网站配置",
+        "operationId": "getByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultWebConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/web_config/list": {
+      "get": {
+        "tags": [
+          "网站配置管理"
+        ],
+        "summary": "获取网站配置列表",
+        "operationId": "list_11",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListWebConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      }
+    },
+    "/api/wall/{id}": {
+      "get": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "获取留言",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultWall"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "删除留言",
+        "operationId": "del",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/wall/cate": {
+      "get": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "获取留言分类列表",
+        "operationId": "getCateList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListWallCate"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 9
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "获取用户",
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUser"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "删除用户",
+        "operationId": "del_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/user/check": {
+      "get": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "校验当前用户Token是否有效",
+        "operationId": "checkPrem",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 10
+      }
+    },
+    "/api/user/author": {
+      "get": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "获取作者信息",
+        "operationId": "getAuthor",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUser"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 11
+      }
+    },
+    "/api/tag/{id}": {
+      "get": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "获取标签",
+        "operationId": "get_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultTag"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "删除标签",
+        "operationId": "del_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/tag/article/count": {
+      "get": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "统计每个标签下的文章数量",
+        "operationId": "staticArticleCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListTag"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/swiper/{id}": {
+      "get": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "获取轮播图",
+        "operationId": "get_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultSwiper"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "删除轮播图",
+        "operationId": "del_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/statis": {
+      "get": {
+        "tags": [
+          "数据统计管理"
+        ],
+        "summary": "获取网站统计数据",
+        "operationId": "getStatisData",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "统计类型：basic(基础数据), overview(概览趋势), new-visitor(新访客趋势), basic-overview(基础概览趋势)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "开始日期，格式: 20240101，可选，默认为当天",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "结束日期，格式: 20240131，可选，默认为当天",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultJsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/rss/list": {
+      "get": {
+        "tags": [
+          "订阅管理"
+        ],
+        "summary": "获取订阅内容",
+        "operationId": "list_12",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListRss"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      }
+    },
+    "/api/record/{id}": {
+      "get": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "获取说说",
+        "operationId": "get_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultRecord"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "说说管理"
+        ],
+        "summary": "删除说说",
+        "operationId": "del_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/page_config/{id}": {
+      "get": {
+        "tags": [
+          "页面配置管理"
+        ],
+        "summary": "根据ID获取页面配置",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "页面配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultPageConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/page_config/name/{name}": {
+      "get": {
+        "tags": [
+          "页面配置管理"
+        ],
+        "summary": "根据名称获取页面配置",
+        "operationId": "getByName_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "配置名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "home_page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultPageConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/page_config/list": {
+      "get": {
+        "tags": [
+          "页面配置管理"
+        ],
+        "summary": "获取页面配置列表",
+        "operationId": "list_13",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListPageConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      }
+    },
+    "/api/oss/{id}": {
+      "get": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "获取oss配置",
+        "operationId": "get_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOssVo"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 4
+      },
+      "delete": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "删除oss配置",
+        "operationId": "del_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 2
+      }
+    },
+    "/api/oss/platform": {
+      "get": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "获取目前支持的oss平台",
+        "operationId": "getPlatform",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListMapStringString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "宇阳",
+        "x-order": 9
+      }
+    },
+    "/api/oss/getEnableOss": {
+      "get": {
+        "tags": [
+          "存储管理"
+        ],
+        "summary": "获取当前启用的oss配置",
+        "operationId": "getEnableOss",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOss"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "laifeng",
+        "x-order": 8
+      }
+    },
+    "/api/link/{id}": {
+      "get": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "获取网站",
+        "operationId": "get_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultLink"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "删除网站",
+        "operationId": "del_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/link/type": {
+      "get": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "获取网站类型列表",
+        "operationId": "typeList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListLinkType"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/footprint/{id}": {
+      "get": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "获取足迹",
+        "operationId": "get_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultFootprint"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "删除足迹",
+        "operationId": "del_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/file/list": {
+      "get": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "获取指定目录中的文件",
+        "operationId": "getFileList",
+        "parameters": [
+          {
+            "name": "dir",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      }
+    },
+    "/api/file/info": {
+      "get": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "获取文件信息",
+        "operationId": "get_8",
+        "parameters": [
+          {
+            "name": "filePath",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultFileInfo"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 4
+      }
+    },
+    "/api/file/dir": {
+      "get": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "获取目录列表",
+        "operationId": "getDirList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      }
+    },
+    "/api/env_config/{id}": {
+      "get": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "根据ID获取环境配置",
+        "operationId": "getById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "环境配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultEnvConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/env_config/name/{name}": {
+      "get": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "根据名称获取环境配置",
+        "operationId": "getByName_2",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "配置名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "database_config"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultEnvConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/env_config/list": {
+      "get": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "获取环境配置列表",
+        "operationId": "list_14",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListEnvConfig"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 1
+      }
+    },
+    "/api/env_config/gaode_map": {
+      "get": {
+        "tags": [
+          "环境配置管理"
+        ],
+        "summary": "获取高德地图配置",
+        "operationId": "getGaodeMapConfig",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 7
+      }
+    },
+    "/api/comment/{id}": {
+      "get": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "获取评论",
+        "operationId": "get_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultComment"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "删除评论",
+        "operationId": "del_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/cate/{id}": {
+      "get": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "获取分类",
+        "operationId": "get_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultCate"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "删除分类",
+        "operationId": "del_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/cate/article/count": {
+      "get": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "获取每个分类中的文章数量",
+        "operationId": "cateArticleCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListCateArticleCount"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 8
+      }
+    },
+    "/api/assistant/{id}": {
+      "get": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "获取助手",
+        "operationId": "get_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultAssistant"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 5
+      },
+      "delete": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "删除助手",
+        "operationId": "del_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 2
+      }
+    },
+    "/api/article/{id}": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "获取文章",
+        "operationId": "get_12",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultArticle"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 6
+      }
+    },
+    "/api/article/view/{article_id}": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "递增文章浏览量",
+        "operationId": "recordView",
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 13
+      }
+    },
+    "/api/article/tag/{tag_id}": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "获取指定标签的文章列表",
+        "operationId": "getTagArticleList",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 10
+      }
+    },
+    "/api/article/random": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "随机获取文章数据",
+        "operationId": "getRandomArticles",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "默认随机获取5篇文章",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListArticle"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 11
+      }
+    },
+    "/api/article/hot": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "获取热门文章数据",
+        "operationId": "getRecommendedArticles",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "默认浏览量最高的5篇文章",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListArticle"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 12
+      }
+    },
+    "/api/article/cate/{cate_id}": {
+      "get": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "获取指定分类的文章列表",
+        "operationId": "getCateArticleList",
+        "parameters": [
+          {
+            "name": "cate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "页码",
+              "example": 1,
+              "default": "1"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "每页显示数量",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "每页显示数量",
+              "example": 5,
+              "default": "5"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringObject"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 9
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "首页"
+        ],
+        "operationId": "Home",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wall/batch": {
+      "delete": {
+        "tags": [
+          "留言管理"
+        ],
+        "summary": "批量删除留言",
+        "operationId": "batchDel",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/user/batch": {
+      "delete": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "批量删除用户",
+        "operationId": "batchDel_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/tag/batch": {
+      "delete": {
+        "tags": [
+          "标签管理"
+        ],
+        "summary": "批量删除标签",
+        "operationId": "batchDel_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/swiper/batch": {
+      "delete": {
+        "tags": [
+          "轮播图管理"
+        ],
+        "summary": "批量删除轮播图",
+        "operationId": "batchDel_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/link/batch": {
+      "delete": {
+        "tags": [
+          "网站管理"
+        ],
+        "summary": "批量删除网站",
+        "operationId": "delBatch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/footprint/batch": {
+      "delete": {
+        "tags": [
+          "足迹管理"
+        ],
+        "summary": "批量删除足迹",
+        "operationId": "batchDel_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/file/batch": {
+      "delete": {
+        "tags": [
+          "文件管理"
+        ],
+        "summary": "批量删除文件",
+        "operationId": "batchDel_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/comment/batch": {
+      "delete": {
+        "tags": [
+          "评论管理"
+        ],
+        "summary": "批量删除评论",
+        "operationId": "batchDel_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/cate/batch": {
+      "delete": {
+        "tags": [
+          "分类管理"
+        ],
+        "summary": "批量删除分类",
+        "operationId": "batchDel_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/assistant/batch": {
+      "delete": {
+        "tags": [
+          "助手管理"
+        ],
+        "summary": "批量删除助手",
+        "operationId": "batchDel_8",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "刘宇阳 | liuyuyang1024@yeah.net",
+        "x-order": 3
+      }
+    },
+    "/api/article/{id}/{is_del}": {
+      "delete": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "删除文章",
+        "operationId": "del_12",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "is_del",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 2
+      }
+    },
+    "/api/article/batch": {
+      "delete": {
+        "tags": [
+          "文章管理"
+        ],
+        "summary": "批量删除文章",
+        "operationId": "batchDel_9",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        },
+        "x-author": "OHH | 2720751424@qq.com",
+        "x-order": 4
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Wall": {
+        "required": [
+          "cateId",
+          "content",
+          "createTime",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "name": {
+            "type": "string",
+            "description": "留言人名称",
+            "example": "神秘人"
+          },
+          "cateId": {
+            "type": "integer",
+            "description": "分类id",
+            "format": "int32",
+            "example": 1
+          },
+          "cate": {
+            "$ref": "#/components/schemas/WallCate"
+          },
+          "color": {
+            "type": "string",
+            "description": "留言墙颜色",
+            "example": "#92e6f54d"
+          },
+          "content": {
+            "type": "string",
+            "description": "留言内容",
+            "example": "这是一段内容"
+          },
+          "email": {
+            "type": "string",
+            "description": "邮箱",
+            "example": "3311118881@qq.com"
+          },
+          "auditStatus": {
+            "type": "integer",
+            "description": "评论是否审核通过",
+            "format": "int32",
+            "example": 1
+          },
+          "isChoice": {
+            "type": "integer",
+            "description": "设置与取消精选",
+            "format": "int32",
+            "example": 1
+          }
+        }
+      },
+      "WallCate": {
+        "required": [
+          "mark",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "标签ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "分类名称",
+            "example": "全部"
+          },
+          "mark": {
+            "type": "string",
+            "description": "分类标识",
+            "example": "all"
+          },
+          "order": {
+            "type": "integer",
+            "description": "分类顺序",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "留言分类",
+        "example": "全部"
+      },
+      "ResultString": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
+      "WallFilterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          },
+          "cateId": {
+            "type": "integer",
+            "description": "根据分类进行筛选",
+            "format": "int32"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0表示获取待审核的留言 | 1表示获取审核通过的留言（默认）",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultMapStringObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "ResultListWall": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Wall"
+            }
+          }
+        }
+      },
+      "UserDTO": {
+        "required": [
+          "createTime",
+          "name",
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户账号",
+            "example": "liuyuyang"
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码"
+          },
+          "name": {
+            "type": "string",
+            "description": "用户名称",
+            "example": "宇阳"
+          }
+        }
+      },
+      "UserLoginDTO": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "用户账号",
+            "example": "liuyuyang"
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码"
+          }
+        }
+      },
+      "UserFilterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          }
+        }
+      },
+      "ResultListUser": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "createTime",
+          "name",
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户账号",
+            "example": "liuyuyang"
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码"
+          },
+          "name": {
+            "type": "string",
+            "description": "用户名称",
+            "example": "宇阳"
+          },
+          "info": {
+            "type": "string",
+            "description": "用户介绍",
+            "example": "再渺小的星光，也有属于他的光芒!"
+          },
+          "email": {
+            "type": "string",
+            "description": "用户邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "用户头像",
+            "example": "yuyang.jpg"
+          }
+        }
+      },
+      "Tag": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "标签ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "标签名称",
+            "example": "Java"
+          },
+          "count": {
+            "type": "integer",
+            "description": "该标签关联的文章数量",
+            "format": "int32"
+          }
+        },
+        "description": "标签实体对象"
+      },
+      "ResultListTag": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "Swiper": {
+        "required": [
+          "image",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "轮播图ID",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "description": "轮播图标题",
+            "example": "这是一个轮播图"
+          },
+          "image": {
+            "type": "string",
+            "description": "轮播图",
+            "example": "http://127.0.0.1:5000/1.jpg"
+          },
+          "description": {
+            "type": "string",
+            "description": "轮播图描述",
+            "example": "这是一个轮播图的描述"
+          },
+          "url": {
+            "type": "string",
+            "description": "轮播图链接",
+            "example": "/"
+          }
+        }
+      },
+      "ResultListSwiper": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Swiper"
+            }
+          }
+        }
+      },
+      "Record": {
+        "required": [
+          "content",
+          "createTime"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "content": {
+            "type": "string",
+            "description": "内容",
+            "example": "大前端永远滴神！"
+          },
+          "images": {
+            "type": "string",
+            "description": "图片",
+            "example": "[]"
+          }
+        }
+      },
+      "FilterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          }
+        }
+      },
+      "ResultListRecord": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Record"
+            }
+          }
+        }
+      },
+      "Oss": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID",
+            "format": "int32"
+          },
+          "platform": {
+            "type": "string",
+            "description": "存储平台"
+          },
+          "platformName": {
+            "type": "string",
+            "description": "平台名称"
+          },
+          "accessKey": {
+            "type": "string",
+            "description": "Access Key"
+          },
+          "secretKey": {
+            "type": "string",
+            "description": "Secret Key"
+          },
+          "endPoint": {
+            "type": "string",
+            "description": "地域"
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "存储桶"
+          },
+          "domain": {
+            "type": "string",
+            "description": "域名"
+          },
+          "basePath": {
+            "type": "string",
+            "description": "文件目录"
+          },
+          "isEnable": {
+            "type": "integer",
+            "description": "是否启用 0:禁用 1：启用",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "Link": {
+        "required": [
+          "createTime",
+          "description",
+          "image",
+          "title",
+          "typeId",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "title": {
+            "type": "string",
+            "description": "网站标题",
+            "example": "这是一个网站"
+          },
+          "description": {
+            "type": "string",
+            "description": "网站描述",
+            "example": "这是一个网站的描述"
+          },
+          "email": {
+            "type": "string",
+            "description": "网站邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "typeId": {
+            "type": "integer",
+            "description": "网站类型",
+            "format": "int32",
+            "example": 1
+          },
+          "type": {
+            "$ref": "#/components/schemas/LinkType"
+          },
+          "image": {
+            "type": "string",
+            "description": "网站图片",
+            "example": "http://127.0.0.1:5000/1.jpg"
+          },
+          "url": {
+            "type": "string",
+            "description": "网站链接",
+            "example": "/"
+          },
+          "rss": {
+            "type": "string",
+            "description": "订阅地址",
+            "example": "/"
+          },
+          "auditStatus": {
+            "type": "integer",
+            "description": "评论是否审核通过",
+            "format": "int32",
+            "example": 1
+          },
+          "order": {
+            "type": "integer",
+            "description": "网站顺序",
+            "format": "int32",
+            "example": 1
+          }
+        }
+      },
+      "LinkType": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "网站类型ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "网站类型名称",
+            "example": "技术类"
+          },
+          "isAdmin": {
+            "type": "integer",
+            "description": "用户是否可选，0表示不可选 1表示可选",
+            "format": "int32",
+            "example": 0
+          },
+          "order": {
+            "type": "integer",
+            "description": "网站类型顺序",
+            "format": "int32",
+            "example": 1
+          }
+        }
+      },
+      "LinkFilterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0表示获取待审核的友联 | 1表示获取审核通过的友联（默认）",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultListLink": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "Footprint": {
+        "required": [
+          "address",
+          "createTime",
+          "position",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "title": {
+            "type": "string",
+            "description": "标题",
+            "example": "这是一个标题"
+          },
+          "address": {
+            "type": "string",
+            "description": "地址",
+            "example": "这是一个地址"
+          },
+          "content": {
+            "type": "string",
+            "description": "内容",
+            "example": "这是一段内容"
+          },
+          "position": {
+            "type": "string",
+            "description": "坐标纬度",
+            "example": "116.413782,39.902957"
+          },
+          "images": {
+            "type": "array",
+            "description": "图片",
+            "example": [],
+            "items": {
+              "type": "string",
+              "description": "图片",
+              "example": "[]"
+            }
+          }
+        }
+      },
+      "ResultListFootprint": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Footprint"
+            }
+          }
+        }
+      },
+      "WallEmailDTO": {
+        "required": [
+          "recipient",
+          "reply_content",
+          "subject",
+          "time",
+          "url",
+          "your_content"
+        ],
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "邮件接收者",
+            "example": "3311118881@qq.com"
+          },
+          "subject": {
+            "type": "string",
+            "description": "邮件标题",
+            "example": "驳回通知"
+          },
+          "recipient": {
+            "type": "string",
+            "description": "发送方",
+            "example": "张三"
+          },
+          "time": {
+            "type": "string",
+            "description": "评论时间",
+            "example": "2024年10月15日 14:44"
+          },
+          "your_content": {
+            "type": "string",
+            "description": "你的内容",
+            "example": "太赞了"
+          },
+          "reply_content": {
+            "type": "string",
+            "description": "回复内容",
+            "example": "必须滴"
+          },
+          "url": {
+            "type": "string",
+            "description": "文章地址",
+            "example": "https://liuyuyang.net"
+          }
+        }
+      },
+      "DismissEmailDTO": {
+        "required": [
+          "content",
+          "recipient",
+          "subject",
+          "time",
+          "type",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "邮件接收者",
+            "example": "3311118881@qq.com"
+          },
+          "subject": {
+            "type": "string",
+            "description": "邮件标题",
+            "example": "驳回通知"
+          },
+          "type": {
+            "type": "string",
+            "description": "类型",
+            "example": "友联"
+          },
+          "recipient": {
+            "type": "string",
+            "description": "接收方",
+            "example": "张三"
+          },
+          "time": {
+            "type": "string",
+            "description": "评论时间",
+            "example": "2024年10月15日 14:44"
+          },
+          "content": {
+            "type": "string",
+            "description": "评论内容",
+            "example": "涉嫌违规"
+          },
+          "url": {
+            "type": "string",
+            "description": "文章地址",
+            "example": "https://liuyuyang.net"
+          }
+        }
+      },
+      "CommentFormDTO": {
+        "required": [
+          "articleId",
+          "commentId",
+          "content",
+          "createTime",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "评论者名称",
+            "example": "宇阳"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "评论者头像",
+            "example": "yuyang.jpg"
+          },
+          "email": {
+            "type": "string",
+            "description": "评论者邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "url": {
+            "type": "string",
+            "description": "评论者网站",
+            "example": "https://blog.liuyuyang.net"
+          },
+          "content": {
+            "type": "string",
+            "description": "评论内容",
+            "example": "这是一段评论内容"
+          },
+          "articleId": {
+            "type": "integer",
+            "description": "该评论所绑定的文章ID",
+            "format": "int32",
+            "example": 1
+          },
+          "commentId": {
+            "type": "integer",
+            "description": "二级评论",
+            "format": "int32",
+            "example": 2
+          },
+          "auditStatus": {
+            "type": "integer",
+            "description": "评论是否审核通过",
+            "format": "int32",
+            "example": 1
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          }
+        }
+      },
+      "CommentFilterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "默认为树形结构，如果设置了list模式，则查询列表结构"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0表示获取待审核的评论 | 1表示获取审核通过的评论（默认）",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string",
+            "description": "根据内容关键词筛选"
+          }
+        }
+      },
+      "Comment": {
+        "required": [
+          "articleId",
+          "commentId",
+          "content",
+          "createTime",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "评论者名称",
+            "example": "宇阳"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "评论者头像",
+            "example": "yuyang.jpg"
+          },
+          "email": {
+            "type": "string",
+            "description": "评论者邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "url": {
+            "type": "string",
+            "description": "评论者网站",
+            "example": "https://blog.liuyuyang.net"
+          },
+          "content": {
+            "type": "string",
+            "description": "评论内容",
+            "example": "这是一段评论内容"
+          },
+          "articleId": {
+            "type": "integer",
+            "description": "该评论所绑定的文章ID",
+            "format": "int32",
+            "example": 1
+          },
+          "commentId": {
+            "type": "integer",
+            "description": "二级评论",
+            "format": "int32",
+            "example": 2
+          },
+          "auditStatus": {
+            "type": "integer",
+            "description": "评论是否审核通过",
+            "format": "int32",
+            "example": 1
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "articleTitle": {
+            "type": "string",
+            "description": "该评论所属的文章名称"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Comment"
+            }
+          }
+        }
+      },
+      "ResultListComment": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Comment"
+            }
+          }
+        }
+      },
+      "CateFormDTO": {
+        "required": [
+          "level",
+          "mark",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "分类ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "分类名称",
+            "example": "大前端"
+          },
+          "url": {
+            "type": "string",
+            "description": "分类链接",
+            "example": "/"
+          },
+          "mark": {
+            "type": "string",
+            "description": "分类标识",
+            "example": "dqd"
+          },
+          "icon": {
+            "type": "string",
+            "description": "分类图标",
+            "example": "🎉"
+          },
+          "level": {
+            "type": "integer",
+            "description": "分类级别",
+            "format": "int32",
+            "example": 0
+          },
+          "type": {
+            "type": "string",
+            "description": "类型",
+            "example": "cate | nav"
+          },
+          "order": {
+            "type": "integer",
+            "description": "分类顺序",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "分类表单传输对象"
+      },
+      "Cate": {
+        "required": [
+          "level",
+          "mark",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "分类ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "分类名称",
+            "example": "大前端"
+          },
+          "url": {
+            "type": "string",
+            "description": "分类链接",
+            "example": "/"
+          },
+          "mark": {
+            "type": "string",
+            "description": "分类标识",
+            "example": "dqd"
+          },
+          "icon": {
+            "type": "string",
+            "description": "分类图标",
+            "example": "🎉"
+          },
+          "level": {
+            "type": "integer",
+            "description": "分类级别",
+            "format": "int32",
+            "example": 0
+          },
+          "type": {
+            "type": "string",
+            "description": "类型",
+            "example": "cate | nav"
+          },
+          "order": {
+            "type": "integer",
+            "description": "分类顺序",
+            "format": "int32",
+            "example": 1
+          },
+          "children": {
+            "type": "array",
+            "description": "子分类列表（树形结构）",
+            "items": {
+              "$ref": "#/components/schemas/Cate"
+            }
+          }
+        },
+        "description": "分类实体对象"
+      },
+      "ResultListCate": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Cate"
+            }
+          }
+        }
+      },
+      "Assistant": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "助手名称",
+            "example": "DeepSeek"
+          },
+          "key": {
+            "type": "string",
+            "description": "API 密钥",
+            "example": "sk-xxxxxxxxxxxxxxxx"
+          },
+          "url": {
+            "type": "string",
+            "description": "API 地址",
+            "example": "https://api.deepseek.com"
+          },
+          "model": {
+            "type": "string",
+            "description": "API 模型",
+            "example": "deepseek-chat"
+          },
+          "isDefault": {
+            "type": "integer",
+            "description": "是否为默认助手",
+            "format": "int32"
+          }
+        },
+        "description": "AI助手实体"
+      },
+      "ResultListAssistant": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Assistant"
+            }
+          }
+        }
+      },
+      "ArticleConfig": {
+        "required": [
+          "articleId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "文章状态",
+            "example": "默认（default） 不在首页显示（no_home） 全站隐藏（hide）"
+          },
+          "password": {
+            "type": "string",
+            "description": "文章密码",
+            "example": "123456"
+          },
+          "isDraft": {
+            "type": "integer",
+            "description": "是否为文章草稿",
+            "format": "int32"
+          },
+          "isEncrypt": {
+            "type": "integer",
+            "description": "是否为加密文章",
+            "format": "int32"
+          },
+          "isDel": {
+            "type": "integer",
+            "description": "是否严格删除",
+            "format": "int32"
+          },
+          "articleId": {
+            "type": "integer",
+            "description": "文章ID",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "文章配置信息"
+      },
+      "ArticleFormDTO": {
+        "required": [
+          "content",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "description": "文章标题",
+            "example": "示例标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "文章介绍"
+          },
+          "content": {
+            "type": "string",
+            "description": "文章主要内容"
+          },
+          "cover": {
+            "type": "string",
+            "description": "文章封面链接"
+          },
+          "cateIds": {
+            "type": "array",
+            "description": "绑定的分类ID",
+            "items": {
+              "type": "integer",
+              "description": "绑定的分类ID",
+              "format": "int32"
+            }
+          },
+          "tagIds": {
+            "type": "array",
+            "description": "绑定的标签ID",
+            "items": {
+              "type": "integer",
+              "description": "绑定的标签ID",
+              "format": "int32"
+            }
+          },
+          "config": {
+            "$ref": "#/components/schemas/ArticleConfig"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          }
+        },
+        "description": "文章表单对象"
+      },
+      "ArticleFillterVo": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "根据关键词进行筛选"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "根据开始时间进行筛选"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "根据结束时间进行筛选"
+          },
+          "cateId": {
+            "type": "integer",
+            "description": "根据分类进行筛选",
+            "format": "int32"
+          },
+          "tagId": {
+            "type": "integer",
+            "description": "根据标签进行筛选",
+            "format": "int32"
+          },
+          "isDraft": {
+            "type": "integer",
+            "description": "是否为草稿, 默认：0 | 草稿：1",
+            "format": "int32",
+            "example": 0
+          },
+          "isDel": {
+            "type": "integer",
+            "description": "是否为严格删除, 默认：0 | 严格删除：1",
+            "format": "int32",
+            "example": 0
+          }
+        }
+      },
+      "Article": {
+        "required": [
+          "content",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "description": "文章标题",
+            "example": "示例标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "文章介绍"
+          },
+          "content": {
+            "type": "string",
+            "description": "文章主要内容"
+          },
+          "cover": {
+            "type": "string",
+            "description": "文章封面链接"
+          },
+          "cateIds": {
+            "type": "array",
+            "description": "绑定的分类ID",
+            "items": {
+              "type": "integer",
+              "description": "绑定的分类ID",
+              "format": "int32"
+            }
+          },
+          "tagIds": {
+            "type": "array",
+            "description": "绑定的标签ID",
+            "items": {
+              "type": "integer",
+              "description": "绑定的标签ID",
+              "format": "int32"
+            }
+          },
+          "config": {
+            "$ref": "#/components/schemas/ArticleConfig"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "1723533206613"
+          },
+          "view": {
+            "type": "integer",
+            "description": "文章浏览量",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "integer",
+            "description": "文章评论数量",
+            "format": "int32"
+          },
+          "cateList": {
+            "type": "array",
+            "description": "分类列表",
+            "items": {
+              "$ref": "#/components/schemas/Cate"
+            }
+          },
+          "tagList": {
+            "type": "array",
+            "description": "标签列表",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "prev": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "next": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "文章实体"
+      },
+      "ResultListArticle": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            }
+          }
+        }
+      },
+      "UserInfoDTO": {
+        "required": [
+          "name",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "用户ID",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户账号",
+            "example": "liuyuyang"
+          },
+          "name": {
+            "type": "string",
+            "description": "用户名称",
+            "example": "宇阳"
+          },
+          "info": {
+            "type": "string",
+            "description": "用户介绍",
+            "example": "再渺小的星光，也有属于他的光芒!"
+          },
+          "email": {
+            "type": "string",
+            "description": "用户邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "用户头像",
+            "example": "yuyang.jpg"
+          }
+        }
+      },
+      "EditPassDTO": {
+        "required": [
+          "newPassword",
+          "newUsername",
+          "oldPassword",
+          "oldUsername"
+        ],
+        "type": "object",
+        "properties": {
+          "oldUsername": {
+            "type": "string",
+            "description": "旧账号",
+            "example": "admin"
+          },
+          "newUsername": {
+            "type": "string",
+            "description": "新账号",
+            "example": "thrivex666"
+          },
+          "oldPassword": {
+            "type": "string",
+            "description": "旧密码"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "新密码"
+          }
+        }
+      },
+      "ResultWebConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebConfig"
+          }
+        }
+      },
+      "WebConfig": {
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "环境配置ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "配置名称",
+            "example": "database_config"
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "description": "配置值(JSON格式)",
+              "example": {
+                "name": "OHH"
+              }
+            },
+            "description": "配置值(JSON格式)",
+            "example": {
+              "name": "OHH"
+            }
+          },
+          "notes": {
+            "type": "string",
+            "description": "配置备注"
+          }
+        }
+      },
+      "ResultListWebConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebConfig"
+            }
+          }
+        }
+      },
+      "ResultWall": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Wall"
+          }
+        }
+      },
+      "ResultListWallCate": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WallCate"
+            }
+          }
+        }
+      },
+      "ResultUser": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "ResultTag": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Tag"
+          }
+        }
+      },
+      "ResultSwiper": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Swiper"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      },
+      "ResultJsonNode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "ResultListRss": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rss"
+            }
+          }
+        }
+      },
+      "Rss": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "type": "string",
+            "description": "作者",
+            "example": "宇阳"
+          },
+          "image": {
+            "type": "string",
+            "description": "网站图片",
+            "example": "http://127.0.0.1:5000/1.jpg"
+          },
+          "email": {
+            "type": "string",
+            "description": "网站邮箱",
+            "example": "liuyuyang1024@yeah.net"
+          },
+          "type": {
+            "type": "string",
+            "description": "网站类型",
+            "example": "技术类"
+          },
+          "title": {
+            "type": "string",
+            "description": "网站标题",
+            "example": "这是一个网站"
+          },
+          "description": {
+            "type": "string",
+            "description": "网站描述",
+            "example": "这是一个网站的描述"
+          },
+          "url": {
+            "type": "string",
+            "description": "网站链接",
+            "example": "/"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "网站创建时间",
+            "example": "1723533206613"
+          }
+        }
+      },
+      "ResultRecord": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Record"
+          }
+        }
+      },
+      "PageConfig": {
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "环境配置ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "配置名称",
+            "example": "database_config"
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "description": "配置值(JSON格式)",
+              "example": {
+                "name": "OHH"
+              }
+            },
+            "description": "配置值(JSON格式)",
+            "example": {
+              "name": "OHH"
+            }
+          },
+          "notes": {
+            "type": "string",
+            "description": "配置备注"
+          }
+        }
+      },
+      "ResultPageConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PageConfig"
+          }
+        }
+      },
+      "ResultListPageConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PageConfig"
+            }
+          }
+        }
+      },
+      "OssVo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID",
+            "format": "int32"
+          },
+          "platform": {
+            "type": "string",
+            "description": "存储平台"
+          },
+          "platformName": {
+            "type": "string",
+            "description": "平台名称"
+          },
+          "accessKey": {
+            "type": "string",
+            "description": "Access Key"
+          },
+          "secretKey": {
+            "type": "string",
+            "description": "Secret Key"
+          },
+          "endPoint": {
+            "type": "string",
+            "description": "地域"
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "存储桶"
+          },
+          "domain": {
+            "type": "string",
+            "description": "域名"
+          },
+          "basePath": {
+            "type": "string",
+            "description": "文件目录"
+          },
+          "isEnable": {
+            "type": "integer",
+            "description": "是否启用 0:禁用 1：启用",
+            "format": "int32"
+          },
+          "projectPath": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultOssVo": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OssVo"
+          }
+        }
+      },
+      "ResultListMapStringString": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ResultOss": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Oss"
+          }
+        }
+      },
+      "ResultLink": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "ResultListLinkType": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkType"
+            }
+          }
+        }
+      },
+      "ResultFootprint": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Footprint"
+          }
+        }
+      },
+      "FileInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "originalFilename": {
+            "type": "string"
+          },
+          "basePath": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "ext": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "thUrl": {
+            "type": "string"
+          },
+          "thFilename": {
+            "type": "string"
+          },
+          "thSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "thContentType": {
+            "type": "string"
+          },
+          "objectId": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "userMetadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "thMetadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "thUserMetadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "attr": {
+            "type": "object",
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "fileAcl": {
+            "type": "object"
+          },
+          "thFileAcl": {
+            "type": "object"
+          },
+          "hashInfo": {
+            "type": "object",
+            "properties": {
+              "raw": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "md2": {
+                "type": "string"
+              },
+              "md5": {
+                "type": "string"
+              },
+              "sha512": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "sha384": {
+                "type": "string"
+              },
+              "sha1": {
+                "type": "string"
+              },
+              "empty": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "uploadId": {
+            "type": "string"
+          },
+          "uploadStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResultFileInfo": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FileInfo"
+          }
+        }
+      },
+      "ResultListMapStringObject": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "EnvConfig": {
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "环境配置ID",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "配置名称",
+            "example": "database_config"
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "description": "配置值(JSON格式)",
+              "example": {
+                "name": "OHH"
+              }
+            },
+            "description": "配置值(JSON格式)",
+            "example": {
+              "name": "OHH"
+            }
+          },
+          "notes": {
+            "type": "string",
+            "description": "配置备注"
+          }
+        }
+      },
+      "ResultEnvConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/EnvConfig"
+          }
+        }
+      },
+      "ResultListEnvConfig": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EnvConfig"
+            }
+          }
+        }
+      },
+      "ResultComment": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Comment"
+          }
+        }
+      },
+      "ResultCate": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Cate"
+          }
+        }
+      },
+      "CateArticleCount": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultListCateArticleCount": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CateArticleCount"
+            }
+          }
+        }
+      },
+      "ResultAssistant": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Assistant"
+          }
+        }
+      },
+      "ResultArticle": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Article"
+          }
+        }
+      }
+    }
+  },
+  "x-openapi": {
+    "x-setting": {
+      "customCode": 200,
+      "language": "zh-CN",
+      "enableSwaggerModels": true,
+      "swaggerModelName": "Swagger Models",
+      "enableReloadCacheParameter": false,
+      "enableAfterScript": true,
+      "enableDocumentManage": true,
+      "enableVersion": false,
+      "enableRequestCache": true,
+      "enableFilterMultipartApis": false,
+      "enableFilterMultipartApiMethodType": "POST",
+      "enableHost": false,
+      "enableHostText": "",
+      "enableDynamicParameter": false,
+      "enableDebug": true,
+      "enableFooter": true,
+      "enableFooterCustom": false,
+      "enableSearch": true,
+      "enableOpenApi": true,
+      "enableHomeCustom": false,
+      "enableGroup": true,
+      "enableResponseCode": true
+    },
+    "x-markdownFiles": []
+  }
+}

@@ -79,7 +79,7 @@ watch(
     <AppNavbar :transparent="true" />
 
     <!-- Huge Banner Header -->
-    <div class="relative w-full h-[400px] md:h-[500px] overflow-hidden">
+    <div class="relative w-full h-[400px] overflow-hidden">
       <img
         :src="
           coverImage ||
@@ -97,10 +97,15 @@ watch(
           该分类：{{ title }} ~ 共计 {{ total }} 篇文章
         </p>
       </div>
+
+      <!-- 底部雾化过渡 -->
+      <div
+        class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-50 dark:from-[#0d1320] to-transparent z-10 pointer-events-none"
+      ></div>
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 lg:px-12 xl:px-32 max-w-7xl py-12">
+    <div class="container mx-auto px-4 lg:px-8 max-w-[1250px] py-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <!-- Main List -->
         <main class="lg:col-span-9 space-y-6">
@@ -140,12 +145,12 @@ watch(
                     <span>👀 {{ article.view }}</span>
                   </div>
                   <h3
-                    class="text-xl font-bold mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
+                    class="text-lg font-bold mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
                   >
                     {{ article.title }}
                   </h3>
                   <p
-                    class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 md:line-clamp-3 mb-4"
+                    class="text-gray-600 dark:text-gray-400 text-[13px] leading-relaxed line-clamp-2 md:line-clamp-3 mb-4"
                   >
                     {{ article.description }}
                   </p>

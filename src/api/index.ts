@@ -14,6 +14,7 @@ import type { Record as RecordType } from '@/types/app/record'
 import type { Footprint } from '@/types/app/footprint'
 import type { Link } from '@/types/app/web'
 import type { Swiper } from '@/types/app/swiper'
+import type { Config } from '@/types/app/config'
 
 // ==================== 文章相关 ====================
 
@@ -422,7 +423,7 @@ export const toggleWallChoice = (id: number) => {
 /**
  * 获取说说列表
  */
-export const getRecordList = (filterData?: FilterData) => {
+export const getRecordList = (filterData: any = {}) => {
   return post<RecordType[]>('/record/list', filterData)
 }
 
@@ -437,7 +438,7 @@ export const getRecordPaging = (
   filterData?: FilterData,
 ) => {
   const { page = 1, size = 10 } = params
-  return post('/record/paging', filterData, { params: { page, size } })
+  return post<Paginate<RecordType[]>>('/record/paging', filterData, { params: { page, size } })
 }
 
 /**
@@ -662,7 +663,7 @@ export const getWebConfigById = (id: number) => {
  * 根据名称获取网站配置
  */
 export const getWebConfigByName = (name: string) => {
-  return get(`/web_config/name/${name}`)
+  return get<Config>(`/web_config/name/${name}`)
 }
 
 /**
@@ -683,7 +684,7 @@ export const getPageConfigList = () => {
  * 根据名称获取页面配置
  */
 export const getPageConfigByName = (name: string) => {
-  return get(`/page_config/name/${name}`)
+  return get<Config>(`/page_config/name/${name}`)
 }
 
 // ==================== 数据统计相关 ====================

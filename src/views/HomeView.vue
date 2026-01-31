@@ -12,9 +12,15 @@ import Typed from '@/components/Typed/index.vue'
 import AppSwiper from '@/components/Swiper/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue'
+import AstronautImg from '@/assets/image/astronaut.png'
+import BgImg from '@/assets/image/2.jpg'
+import Img8 from '@/assets/image/8.jpg'
+import Img9 from '@/assets/image/9.png'
+import ImgCat from '@/assets/image/cat.jpg'
 
 // 数据状态
 const loading = ref(true)
+
 const articles = ref<Article[]>([])
 const categories = ref<Cate[]>([])
 const tags = ref<Tag[]>([])
@@ -29,9 +35,9 @@ const totalPages = computed(() => Math.ceil(total.value / size.value))
 
 // 打字机文本
 const typedStrings = ref([
-  'Keep Hungry, Keep Foolish.',
-  'Code creates the world.',
-  'To be a better man.',
+  'System.out.println("Keep Hungry, Keep Foolish.");',
+  'printf("Code creates the world.");',
+  'console.log("To be a better man.");',
 ])
 
 // 加载数据
@@ -53,7 +59,14 @@ const loadData = async () => {
 
     categories.value = categoriesRes.data || []
     tags.value = tagsRes.data || []
-    swipers.value = swipersRes.data || []
+
+    // 静态覆盖轮播图数据
+    swipers.value = [
+      { id: 1, image: Img8, title: '2025 年终总结', description: '2025 即将落幕，按照以往的惯例 是时候对这一年的成长画上一个圆满的句号了' },
+      { id: 2, image: Img9, title: 'Memory Blog 现代化博客系统', description: '年轻、高颜值、全开源、永不收费的现代化博客系统' },
+      { id: 3, image: ImgCat, title: '对 AI 的看法与思考', description: '从8月份接触到现在，已经快半年了，今天找一期文章，来谈一谈我对 AI 的理解...' },
+    ] as any
+
     author.value = authorRes.data || null
   } catch (err) {
     console.error('Data load failed:', err)
@@ -85,11 +98,12 @@ onMounted(() => {
     <AppNavbar :transparent="true" />
 
     <!-- 3. 首页静态 Hero 区域 (大背景图 + 打字机) -->
-    <div class="relative w-full h-[550px] overflow-hidden group">
+    <!-- 3. 首页静态 Hero 区域 (大背景图 + 打字机) -->
+    <div class="relative w-full h-[400px] overflow-hidden group">
       <!-- 静态背景图 -->
       <img
-        src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop"
-        class="w-full h-full object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
+        :src="BgImg"
+        class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
         alt="Hero Background"
       />
 
@@ -105,41 +119,58 @@ onMounted(() => {
 
         <!-- 打字机效果 -->
         <div
-          class="flex items-center gap-3 text-lg md:text-2xl font-mono bg-white/10 backdrop-blur-md px-8 py-4 rounded-full border border-white/20 shadow-2xl animate-fade-in-up delay-100"
+          class="flex items-center justify-center gap-3 text-lg md:text-2xl font-mono text-white animate-fade-in-up delay-100"
         >
-          <span class="animate-pulse">🚀</span>
-          <span class="text-gray-200">Welcome:</span>
           <Typed
             :strings="typedStrings"
             :typeSpeed="80"
             :backSpeed="50"
             :loop="true"
-            className="font-bold text-blue-300"
+            className="font-bold drop-shadow-md"
           />
         </div>
+      </div>
 
-        <!-- 向下滚动提示 -->
-        <div class="absolute bottom-8 animate-bounce text-white/50">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </div>
+      <!-- 底部波浪效果 -->
+      <div class="absolute bottom-0 left-0 w-full z-20 pointer-events-none translate-y-[1px]">
+        <svg
+          class="w-full h-[60px] md:h-[120px]"
+          viewBox="0 0 1440 320"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="currentColor"
+            class="text-gray-50 dark:text-[#0d1320] transition-colors duration-300"
+            fill-opacity="1"
+            d="M0,224L60,213.3C120,203,240,181,360,181.3C480,181,600,203,720,224C840,245,960,267,1080,261.3C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- 向下滚动提示 -->
+      <div
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/50 z-30 hidden md:block"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
       </div>
     </div>
 
     <!-- 4. 内容区 -->
-    <div class="container mx-auto px-4 lg:px-12 xl:px-32 max-w-7xl py-12 relative z-10">
+    <div class="container mx-auto px-4 lg:px-8 max-w-[1250px] py-12 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <!-- 左侧 (占 9 列) -->
         <main class="lg:col-span-9 space-y-8">
@@ -154,10 +185,10 @@ onMounted(() => {
           <div
             class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700/50 pb-4 mb-8 mt-12"
           >
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-              <span class="text-3xl">📝</span> 最新文章
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <span class="text-2xl">📝</span> 最新文章
             </h2>
-            <span class="text-gray-400 text-sm">共 {{ total }} 篇</span>
+            <span class="text-gray-400 text-xs">共 {{ total }} 篇</span>
           </div>
 
           <div v-if="loading" class="text-center py-20 text-gray-500 animate-pulse">
@@ -204,12 +235,12 @@ onMounted(() => {
                     <span class="flex items-center gap-1">💬 {{ article.comment }}</span>
                   </div>
                   <h3
-                    class="text-xl font-bold text-gray-800 dark:text-white mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
+                    class="text-lg font-bold text-gray-800 dark:text-white mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
                   >
                     {{ article.title }}
                   </h3>
                   <p
-                    class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4"
+                    class="text-gray-600 dark:text-gray-400 text-[13px] leading-relaxed line-clamp-3 mb-4"
                   >
                     {{ article.description || '暂无描述...' }}
                   </p>
@@ -277,6 +308,22 @@ onMounted(() => {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
 </style>
