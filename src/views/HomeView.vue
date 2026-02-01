@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { getArticleList, getCategoryList, getTagList, getSwiperList, getAuthorInfo } from '@/api'
 import type { Article } from '@/types/app/article'
 import type { Cate } from '@/types/app/cate'
@@ -10,6 +11,7 @@ import type { User } from '@/types/app/user'
 import Starry from '@/components/Starry/index.vue'
 import Typed from '@/components/Typed/index.vue'
 import AppSwiper from '@/components/Swiper/index.vue'
+import Waves from '@/components/Waves/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue'
 import AstronautImg from '@/assets/image/astronaut.png'
@@ -41,6 +43,13 @@ const typedStrings = ref([
 ])
 
 // 加载数据
+const router = useRouter()
+
+const viewArticle = (id?: number) => {
+  if (!id) return
+  router.push({ name: 'article', params: { id } })
+}
+
 const loadData = async () => {
   try {
     loading.value = true
@@ -62,9 +71,24 @@ const loadData = async () => {
 
     // 静态覆盖轮播图数据
     swipers.value = [
-      { id: 1, image: Img8, title: '2025 年终总结', description: '2025 即将落幕，按照以往的惯例 是时候对这一年的成长画上一个圆满的句号了' },
-      { id: 2, image: Img9, title: 'Memory Blog 现代化博客系统', description: '年轻、高颜值、全开源、永不收费的现代化博客系统' },
-      { id: 3, image: ImgCat, title: '对 AI 的看法与思考', description: '从8月份接触到现在，已经快半年了，今天找一期文章，来谈一谈我对 AI 的理解...' },
+      {
+        id: 1,
+        image: Img8,
+        title: '2025 年终总结',
+        description: '2025 即将落幕，按照以往的惯例 是时候对这一年的成长画上一个圆满的句号了',
+      },
+      {
+        id: 2,
+        image: Img9,
+        title: 'Memory Blog 现代化博客系统',
+        description: '年轻、高颜值、全开源、永不收费的现代化博客系统',
+      },
+      {
+        id: 3,
+        image: ImgCat,
+        title: '对 AI 的看法与思考',
+        description: '从8月份接触到现在，已经快半年了，今天找一期文章，来谈一谈我对 AI 的理解...',
+      },
     ] as any
 
     author.value = authorRes.data || null
@@ -131,21 +155,9 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- 底部波浪效果 -->
-      <div class="absolute bottom-0 left-0 w-full z-20 pointer-events-none translate-y-[1px]">
-        <svg
-          class="w-full h-[60px] md:h-[120px]"
-          viewBox="0 0 1440 320"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="currentColor"
-            class="text-gray-50 dark:text-[#0d1320] transition-colors duration-300"
-            fill-opacity="1"
-            d="M0,224L60,213.3C120,203,240,181,360,181.3C480,181,600,203,720,224C840,245,960,267,1080,261.3C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
-          ></path>
-        </svg>
+      <!-- 底部动态波浪 -->
+      <div class="absolute bottom-0 left-0 w-full z-20 overflow-hidden leading-[0]">
+        <Waves />
       </div>
 
       <!-- 向下滚动提示 -->
@@ -203,7 +215,10 @@ onMounted(() => {
               class="group relative bg-white/80 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row h-auto md:h-64"
             >
               <!-- 封面图 -->
-              <div class="w-full md:w-2/5 h-48 md:h-full overflow-hidden relative">
+              <div
+                class="w-full md:w-2/5 h-48 md:h-full overflow-hidden relative cursor-pointer"
+                @click="viewArticle(article.id)"
+              >
                 <img
                   :src="
                     article.cover ||
@@ -235,7 +250,8 @@ onMounted(() => {
                     <span class="flex items-center gap-1">💬 {{ article.comment }}</span>
                   </div>
                   <h3
-                    class="text-lg font-bold text-gray-800 dark:text-white mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
+                    class="text-lg font-bold text-gray-800 dark:text-white mb-3 group-hover:text-blue-500 transition-colors line-clamp-2 cursor-pointer"
+                    @click="viewArticle(article.id)"
                   >
                     {{ article.title }}
                   </h3>
@@ -256,6 +272,7 @@ onMounted(() => {
                     >
                   </div>
                   <button
+                    @click.stop="viewArticle(article.id)"
                     class="px-4 py-1.5 text-xs font-bold bg-blue-50 dark:bg-transparent border border-blue-500/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
                   >
                     阅读全文
