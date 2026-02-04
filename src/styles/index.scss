@@ -8,6 +8,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  src: url('../assets/font/MaShanZheng-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html.dark {
   // 闪念编辑器主题
   --w-e-textarea-color: #fff;
@@ -17,14 +25,8 @@ body {
   background-color: #f9f9f9;
   font-weight: normal;
 
-  // 霞鹜文楷
+  // 霞鹜文楷 (Global Primary Font)
   font-family: 'LXGW WenKai', sans-serif;
-
-  // 原俠正楷
-  // font-family:'GuanKiapTsingKhai';
-
-  // 悠哉
-  // font-family:'Yozai Medium';
 }
 
 /* 滚动条槽 */

@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
-import Img1 from '@/assets/image/1.jpg'
-import Img3 from '@/assets/image/3.png'
-import Img4 from '@/assets/image/4.jpg'
-import Img5 from '@/assets/image/5.jpg'
+// 图床链接
+const Img1 = 'https://bu.dusays.com/2026/02/04/698346b2079d6.jpg' // 1.jpg
+const Img3 = 'https://bu.dusays.com/2026/02/04/698346b3e9880.png' // 3.png
+const Img4 = 'https://bu.dusays.com/2026/02/04/698346b17d6e5.jpg' // 4.jpg
+const Img5 = 'https://bu.dusays.com/2026/02/04/698346b1530ec.jpg' // 5.jpg
 
 const contrastImgs = [Img1, Img3, Img4, Img5]
 

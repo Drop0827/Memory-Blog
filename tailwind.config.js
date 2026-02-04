@@ -14,6 +14,7 @@ export default {
       },
       fontFamily: {
         sans: ['"LXGW WenKai"', 'sans-serif'],
+        article: ['"Ma Shan Zheng"', '"LXGW WenKai"', 'serif'],
       },
       transitionDuration: {
         DEFAULT: '300ms',

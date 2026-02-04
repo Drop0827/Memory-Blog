@@ -26,24 +26,33 @@ onMounted(() => {
 })
 
 const getRandomColor = () => {
-  const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500']
+  const colors = [
+    'bg-red-500',
+    'bg-blue-500',
+    'bg-green-500',
+    'bg-yellow-500',
+    'bg-purple-500',
+    'bg-pink-500',
+  ]
   return colors[Math.floor(Math.random() * colors.length)]
 }
 </script>
 
 <template>
-  <div class="friends-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+  <div
+    class="friends-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300"
+  >
     <Starry />
     <AppNavbar :transparent="false" />
 
     <div class="container mx-auto px-4 lg:px-8 max-w-[1000px] py-24 relative z-10">
       <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+        <h1
+          class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent"
+        >
           朋友圈
         </h1>
-        <p class="text-gray-500 dark:text-gray-400 text-lg">
-          相识即是缘，这里记录了我的小伙伴们
-        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">相识即是缘，这里记录了我的小伙伴们</p>
       </div>
 
       <div v-if="loading" class="text-center py-20 opacity-60">
@@ -63,12 +72,17 @@ const getRandomColor = () => {
               <img
                 :src="link.image || '/avatar.png'"
                 class="w-full h-full rounded-full object-cover border-2 border-gray-100 dark:border-gray-700 group-hover:rotate-[360deg] transition-transform duration-700"
-                @error="(e: any) => e.target.src = '/avatar.png'"
+                @error="(e: any) => (e.target.src = '/avatar.png')"
               />
-              <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-[#1e2530]" :class="getRandomColor()"></div>
+              <div
+                class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-[#1e2530]"
+                :class="getRandomColor()"
+              ></div>
             </div>
             <div class="overflow-hidden">
-              <h3 class="font-bold text-gray-800 dark:text-gray-200 group-hover:text-blue-500 transition-colors truncate">
+              <h3
+                class="font-bold text-gray-800 dark:text-gray-200 group-hover:text-blue-500 transition-colors truncate"
+              >
                 {{ link.title }}
               </h3>
               <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">

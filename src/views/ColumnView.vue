@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { getArticleList, getCategoryList, getTagList, getAuthorInfo } from '@/api'
+import { ref, onMounted, watch, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  getArticleList,
+  getCategoryList,
+  getTagList,
+  getAuthorInfo,
+  getCategoryArticleCount,
+  getTagArticleCount,
+} from '@/api'
 import type { Article } from '@/types/app/article'
 import type { Cate } from '@/types/app/cate'
 import type { Tag } from '@/types/app/tag'
@@ -10,6 +17,7 @@ import type { User } from '@/types/app/user'
 import Starry from '@/components/Starry/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue'
+import Pagination from '@/components/Pagination/index.vue'
 
 // Props, allowing this view to be reused with different configurations
 const props = defineProps<{
@@ -21,6 +29,13 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+const router = useRouter()
+
+// 文章详情页跳转
+const viewArticle = (id?: number) => {
+  if (!id) return
+  router.push({ name: 'article', params: { id } })
+}
 
 // Data State
 const loading = ref(true)
@@ -30,28 +45,106 @@ const tags = ref<Tag[]>([])
 const author = ref<User | null>(null)
 const total = ref(0)
 const page = ref(1)
-const size = ref(10)
+const size = ref(6) // 用户要求每页 6 篇
+const totalPages = computed(() => Math.ceil(total.value / size.value))
+
+const prevPage = () => {
+  if (page.value > 1) {
+    page.value--
+    loadData()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
+const nextPage = () => {
+  if (page.value < totalPages.value) {
+    page.value++
+    loadData()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
+const handlePageChange = (newPage: number) => {
+  page.value = newPage
+  loadData()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// 统计数据
+const categoryArticleCounts = ref<Record<string, number>>({})
+const tagArticleCounts = ref<Record<string, number>>({})
 
 const loadData = async () => {
   try {
     loading.value = true
 
-    // 模拟筛选：真实情况应该传 categoryId 给后端
-    // 这里暂时请求所有文章
-    const [articlesRes, categoriesRes, tagsRes, authorRes] = await Promise.all([
-      getArticleList({ page: page.value, size: size.value, isDraft: 0, isDel: 0 }),
+    // 1. 先获取分类列表、标签列表、作者信息、统计信息
+    const [categoriesRes, tagsRes, authorRes, cateCountRes, tagCountRes] = await Promise.all([
       getCategoryList('recursion'),
       getTagList(),
       getAuthorInfo(),
+      getCategoryArticleCount(),
+      getTagArticleCount(),
     ])
 
-    const articleData = articlesRes.data
-    articles.value = articleData.result || []
-    total.value = articleData.total || 0
-
-    categories.value = categoriesRes.data || []
+    const categoryList = categoriesRes.data || []
+    categories.value = categoryList
     tags.value = tagsRes.data || []
     author.value = authorRes.data || null
+
+    // 处理分类统计
+    if (cateCountRes.data) {
+      const counts: Record<string, number> = {}
+      if (Array.isArray(cateCountRes.data)) {
+        cateCountRes.data.forEach((item: { id?: number; name: string; count: number }) => {
+          if (item.name) {
+            counts[item.name] = item.count || 0
+          }
+        })
+      }
+      categoryArticleCounts.value = counts
+    }
+
+    // 处理标签统计
+    if (tagCountRes.data) {
+      const counts: Record<string, number> = {}
+      if (Array.isArray(tagCountRes.data)) {
+        tagCountRes.data.forEach((item: { id?: number; name: string; count: number }) => {
+          if (item.name) {
+            counts[item.name] = item.count || 0
+          }
+        })
+      }
+      tagArticleCounts.value = counts
+    }
+
+    // 2. 根据 props.title 查找对应的分类 ID
+    const targetCate = categoryList.find((c) => c.name === props.title)
+    const targetCateId = targetCate
+      ? targetCate.id
+      : props.categoryId
+        ? Number(props.categoryId)
+        : undefined
+
+    if (targetCateId) {
+      // 3. 带着分类 ID 获取文章列表
+      const articlesRes = await getArticleList({
+        page: page.value,
+        size: size.value,
+        isDraft: 0,
+        isDel: 0,
+        cateId: targetCateId,
+      })
+
+      const articleData = articlesRes.data
+      articles.value = articleData.result || []
+      total.value = articleData.total || 0
+    } else {
+      // 如果没找到对应分类，不显示任何文章
+      articles.value = []
+      total.value = 0
+      console.warn(`未找到分类 "${props.title}"，请确认后台是否存在该分类。`)
+    }
   } catch (err) {
     console.error('Failed to load data', err)
   } finally {
@@ -66,6 +159,8 @@ onMounted(() => {
 watch(
   () => route.path,
   () => {
+    // 重置分页并重新加载
+    page.value = 1
     loadData()
   },
 )
@@ -73,7 +168,7 @@ watch(
 
 <template>
   <div
-    class="column-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300"
+    class="column-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300"
   >
     <Starry />
     <AppNavbar :transparent="true" />
@@ -100,7 +195,7 @@ watch(
 
       <!-- 底部雾化过渡 -->
       <div
-        class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-50 dark:from-[#0d1320] to-transparent z-10 pointer-events-none"
+        class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-50 dark:from-[#1a1b26] to-transparent z-10 pointer-events-none"
       ></div>
     </div>
 
@@ -118,7 +213,10 @@ watch(
               class="group relative bg-white/80 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row h-auto md:h-64"
             >
               <!-- Cover -->
-              <div class="w-full md:w-2/5 h-48 md:h-full overflow-hidden relative">
+              <div
+                class="w-full md:w-2/5 h-48 md:h-full overflow-hidden relative cursor-pointer"
+                @click="viewArticle(article.id)"
+              >
                 <img
                   :src="
                     article.cover ||
@@ -130,7 +228,7 @@ watch(
                   <span
                     class="px-3 py-1 text-xs font-bold bg-blue-600/90 text-white rounded-lg backdrop-blur-sm shadow-lg"
                   >
-                    {{ title }}
+                    {{ article.cateList?.[0]?.name || '默认分类' }}
                   </span>
                 </div>
               </div>
@@ -145,7 +243,8 @@ watch(
                     <span>👀 {{ article.view }}</span>
                   </div>
                   <h3
-                    class="text-lg font-bold mb-3 group-hover:text-blue-500 transition-colors line-clamp-2"
+                    class="text-lg font-bold mb-3 group-hover:text-blue-500 transition-colors line-clamp-2 cursor-pointer"
+                    @click="viewArticle(article.id)"
                   >
                     {{ article.title }}
                   </h3>
@@ -158,6 +257,7 @@ watch(
 
                 <div class="flex items-center justify-end mt-auto">
                   <button
+                    @click.stop="viewArticle(article.id)"
                     class="px-5 py-2 text-xs font-bold bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
                   >
                     阅读全文
@@ -166,11 +266,27 @@ watch(
               </div>
             </article>
           </div>
+
+          <!-- 分页 -->
+          <Pagination
+            v-if="totalPages > 1"
+            :page="page"
+            :total="totalPages"
+            :customHandler="true"
+            @change="handlePageChange"
+            className="mt-10"
+          />
         </main>
 
         <!-- Sidebar -->
         <aside class="lg:col-span-3">
-          <AppSidebar :author="author" :categories="categories" :tags="tags" />
+          <AppSidebar
+            :author="author"
+            :categories="categories"
+            :tags="tags"
+            :category-article-counts="categoryArticleCounts"
+            :tag-article-counts="tagArticleCounts"
+          />
         </aside>
       </div>
     </div>

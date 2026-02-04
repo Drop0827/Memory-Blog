@@ -42,7 +42,7 @@ onUnmounted(() => {
     class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5"
     :class="
       isScrolled || !transparent
-        ? 'bg-[#0d1320]/80 backdrop-blur-md h-16 shadow-lg'
+        ? 'bg-[#1a1b26]/90 backdrop-blur-md h-16 shadow-lg'
         : 'bg-transparent h-20'
     "
   >
@@ -120,7 +120,9 @@ onUnmounted(() => {
       <div class="flex items-center gap-6 z-20">
         <!-- 探索 (Dropdown) - Moved here -->
         <div class="relative group cursor-pointer hidden lg:block">
-          <span class="flex items-center gap-1 text-[13px] font-medium text-gray-300 group-hover:text-blue-500 transition-colors px-3 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10">
+          <span
+            class="flex items-center gap-1 text-[13px] font-medium text-gray-300 group-hover:text-blue-500 transition-colors px-3 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10"
+          >
             <span>🧩</span> 探索
             <svg
               xmlns="http://www.w3.org/2000/svg"

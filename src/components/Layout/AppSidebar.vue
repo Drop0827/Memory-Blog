@@ -3,18 +3,44 @@ import type { User } from '@/types/app/user'
 import type { Cate } from '@/types/app/cate'
 import type { Tag } from '@/types/app/tag'
 
-import bgImage from '@/assets/image/6.jpg'
-import avatarImage from '@/assets/image/7.png'
+// 图床链接
+const bgImage = 'https://bu.dusays.com/2026/02/04/698346b16d065.jpg' // 6.jpg
+const avatarImage = 'https://bu.dusays.com/2026/02/04/698346b17c425.png' // 7.png
 
 import GithubIcon from '@/assets/svg/socializing/GitHub.svg'
 import CSDNIcon from '@/assets/svg/socializing/CSDN.svg'
 import QQIcon from '@/assets/svg/socializing/QQ.svg'
 
-defineProps<{
+const props = defineProps<{
   author: User | null
   categories: Cate[]
   tags: Tag[]
+  categoryArticleCounts?: Record<string, number>
+  tagArticleCounts?: Record<string, number>
+  selectedCateId?: number | null
+  selectedTagId?: number | null
 }>()
+
+// 定义事件
+const emit = defineEmits<{
+  (e: 'filter-category', cateId: number, cateName: string): void
+  (e: 'filter-tag', tagId: number, tagName: string): void
+  (e: 'clear-filter'): void
+}>()
+
+// 处理分类点击
+const handleCategoryClick = (cate: Cate) => {
+  if (cate.id) {
+    emit('filter-category', cate.id, cate.name)
+  }
+}
+
+// 处理标签点击
+const handleTagClick = (tag: Tag) => {
+  if (tag.id) {
+    emit('filter-tag', tag.id, tag.name)
+  }
+}
 </script>
 
 <template>
@@ -82,7 +108,11 @@ defineProps<{
               class="w-8 h-8 flex items-center justify-center rounded-full bg-pink-50 dark:bg-pink-900/20 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors"
               title="Bilibili"
             >
-              <svg viewBox="0 0 1024 1024" class="w-5 h-5 text-[#fb7299]" fill="currentColor"><path d="M777.525 316.695h-531.05c-66.605 0-120.605 54-120.605 120.605v280.935c0 66.6 54 120.6 120.605 120.6h531.05c66.605 0 120.605-54 120.605-120.6V437.3c0-66.605-54-120.605-120.605-120.605z m-531.05 452.89c-28.435 0-51.355-22.925-51.355-51.355V437.3c0-28.43 22.92-51.355 51.355-51.355h531.05c28.435 0 51.355 22.925 51.355 51.355v280.935c0 28.43-22.92 51.355-51.355 51.355h-531.05z m51.355-385.735c-15.68 0-28.435-12.75-28.435-28.43s12.755-28.435 28.435-28.435h73.475l78.89-80.205c10.46-10.455 27.42-10.455 37.88 0s10.455 27.42 0 37.88l-54.885 55.79h269.41l-58.42-59.395c-10.46-10.46-10.46-27.425 0-37.88s27.42-10.46 37.88 0l82.72 84.095h70.365c15.68 0 28.435 12.755 28.435 28.435s-12.755 28.435-28.435 28.435H297.83z"></path></svg>
+              <svg viewBox="0 0 1024 1024" class="w-5 h-5 text-[#fb7299]" fill="currentColor">
+                <path
+                  d="M777.525 316.695h-531.05c-66.605 0-120.605 54-120.605 120.605v280.935c0 66.6 54 120.6 120.605 120.6h531.05c66.605 0 120.605-54 120.605-120.6V437.3c0-66.605-54-120.605-120.605-120.605z m-531.05 452.89c-28.435 0-51.355-22.925-51.355-51.355V437.3c0-28.43 22.92-51.355 51.355-51.355h531.05c28.435 0 51.355 22.925 51.355 51.355v280.935c0 28.43-22.92 51.355-51.355 51.355h-531.05z m51.355-385.735c-15.68 0-28.435-12.75-28.435-28.43s12.755-28.435 28.435-28.435h73.475l78.89-80.205c10.46-10.455 27.42-10.455 37.88 0s10.455 27.42 0 37.88l-54.885 55.79h269.41l-58.42-59.395c-10.46-10.46-10.46-27.425 0-37.88s27.42-10.46 37.88 0l82.72 84.095h70.365c15.68 0 28.435 12.755 28.435 28.435s-12.755 28.435-28.435 28.435H297.83z"
+                ></path>
+              </svg>
             </a>
 
             <!-- QQ -->
@@ -92,7 +122,11 @@ defineProps<{
               class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
               title="QQ"
             >
-              <img :src="QQIcon" class="w-5 h-5 transform hover:rotate-12 transition-transform" alt="QQ" />
+              <img
+                :src="QQIcon"
+                class="w-5 h-5 transform hover:rotate-12 transition-transform"
+                alt="QQ"
+              />
             </a>
           </div>
         </div>
@@ -122,15 +156,27 @@ defineProps<{
         <li
           v-for="cate in categories"
           :key="cate.id"
+          @click="handleCategoryClick(cate)"
           class="group flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition cursor-pointer"
+          :class="{ 'bg-blue-50 dark:bg-blue-900/20': selectedCateId === cate.id }"
         >
           <span
-            class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-blue-500 transition"
+            class="text-sm transition"
+            :class="
+              selectedCateId === cate.id
+                ? 'text-blue-600 dark:text-blue-400 font-medium'
+                : 'text-gray-600 dark:text-gray-300 group-hover:text-blue-500'
+            "
             >{{ cate.name }}</span
           >
           <span
-            class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full text-gray-500 dark:text-gray-300 group-hover:bg-blue-100 group-hover:text-blue-600 transition"
-            >{{ cate.children?.length || 0 }}</span
+            class="text-xs px-2 py-0.5 rounded-full transition"
+            :class="
+              selectedCateId === cate.id
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-300 group-hover:bg-blue-100 group-hover:text-blue-600'
+            "
+            >{{ categoryArticleCounts?.[cate.name] || 0 }}</span
           >
         </li>
       </ul>
@@ -149,9 +195,18 @@ defineProps<{
         <span
           v-for="tag in tags"
           :key="tag.id"
-          class="px-3 py-1 text-xs bg-gray-200 dark:bg-white/5 hover:bg-blue-500 hover:text-white rounded-lg transition-all cursor-pointer text-gray-600 dark:text-gray-300"
+          @click="handleTagClick(tag)"
+          class="px-3 py-1 text-xs rounded-lg transition-all cursor-pointer"
+          :class="
+            selectedTagId === tag.id
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-200 dark:bg-white/5 hover:bg-purple-500 hover:text-white text-gray-600 dark:text-gray-300'
+          "
         >
           #{{ tag.name }}
+          <span v-if="tagArticleCounts?.[tag.name]" class="ml-1 opacity-75"
+            >({{ tagArticleCounts?.[tag.name] }})</span
+          >
         </span>
       </div>
     </div>

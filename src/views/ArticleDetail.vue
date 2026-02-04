@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useConfigStore } from '@/stores'
 import { getArticleDetail, recordArticleView } from '@/api'
 import type { Article } from '@/types/app/article'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue' // Reuse Sidebar if possible, or just build a simple layout
 import Starry from '@/components/Starry/index.vue'
+import Waves from '@/components/Waves/index.vue'
+const BgImg = 'https://bu.dusays.com/2026/02/04/698346b1404a4.jpg' // 2.jpg
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 
 const route = useRoute()
+const configStore = useConfigStore()
+const { isDark } = storeToRefs(configStore)
 const loading = ref(true)
 const article = ref<Article | null>(null)
 const previewId = 'article-preview'
+
+// 计算 Markdown 编辑器主题
+const editorTheme = computed(() => (isDark.value ? 'dark' : 'light'))
 
 // 简单的日期格式化
 const formatDate = (ts: string) => {
@@ -47,7 +56,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="article-detail-view min-h-screen bg-white dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans"
+    class="article-detail-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300"
   >
     <!-- 1. 全局星空背景 (保持) -->
     <Starry />
@@ -56,19 +65,20 @@ onMounted(() => {
     <AppNavbar :transparent="true" />
 
     <!-- 3. 顶部 Header / Hero 区域 -->
-    <div class="relative w-full h-[55vh] min-h-[400px] flex items-center justify-center">
+    <div
+      class="relative w-full h-[55vh] min-h-[400px] flex items-center justify-center overflow-hidden group"
+    >
       <!-- 背景图 -->
       <div class="absolute inset-0 z-0">
         <img
-          :src="
-            article?.cover ||
-            'https://images.unsplash.com/photo-1499750310159-5b5f2269a2d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-          "
-          class="w-full h-full object-cover"
+          :src="BgImg"
+          class="w-full h-full object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
           alt="Page Header"
         />
         <!-- 遮罩层 - 加深以突出白字 -->
-        <div class="absolute inset-0 bg-black/50"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"
+        ></div>
       </div>
 
       <!-- 文章标题信息 (居中显示) -->
@@ -79,7 +89,7 @@ onMounted(() => {
 
         <!-- Meta 信息栏 -->
         <div
-          class="inline-flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm md:text-base bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 shadow-sm"
+          class="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm md:text-base mt-6 opacity-90"
         >
           <!-- 分类 -->
           <div class="flex items-center gap-2">
@@ -88,19 +98,19 @@ onMounted(() => {
               {{ cate.name }}
             </span>
           </div>
-          <div class="w-px h-4 bg-white/30 hidden md:block"></div>
+          <div class="w-px h-3 bg-white/40 hidden md:block"></div>
           <!-- 阅读 -->
           <div class="flex items-center gap-2">
             <span class="opacity-80">🔥 阅读量:</span>
             <span class="font-bold">{{ article?.view }}</span>
           </div>
-          <div class="w-px h-4 bg-white/30 hidden md:block"></div>
+          <div class="w-px h-3 bg-white/40 hidden md:block"></div>
           <!-- 评论 -->
           <div class="flex items-center gap-2">
             <span class="opacity-80">💬 评论数:</span>
             <span class="font-bold">{{ article?.comment || 0 }}</span>
           </div>
-          <div class="w-px h-4 bg-white/30 hidden md:block"></div>
+          <div class="w-px h-3 bg-white/40 hidden md:block"></div>
           <!-- 时间 -->
           <div class="flex items-center gap-2">
             <span class="opacity-80">🕒 发布时间:</span>
@@ -109,60 +119,22 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- 波浪装饰 (可选) -->
-      <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg
-          class="relative block w-[calc(100%+1.3px)] h-[50px]"
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            class="fill-gray-50 dark:fill-[#0d1320]"
-          ></path>
-        </svg>
+      <!-- 波浪装饰 -->
+      <div class="absolute bottom-0 left-0 w-full z-20 overflow-hidden leading-[0]">
+        <Waves />
       </div>
     </div>
 
     <!-- 4. 主要内容区域 -->
-    <div class="container mx-auto px-4 max-w-[900px] relative z-20 pb-24 -mt-10">
+    <div class="container mx-auto px-4 max-w-[900px] relative z-20 pb-24 pt-8">
       <!-- 加载中 -->
-      <div
-        v-if="loading"
-        class="text-center py-20 animate-pulse text-gray-500 bg-white dark:bg-gray-800 rounded-xl shadow-sm"
-      >
+      <div v-if="loading" class="text-center py-20 animate-pulse text-gray-500 rounded-xl">
         正在加载文章详情...
       </div>
 
       <div v-else-if="article">
-        <!-- 卡片容器 -->
-        <div
-          class="bg-white dark:bg-[#1a202c] rounded-2xl shadow-xl p-6 md:p-10 border border-gray-100 dark:border-gray-700/50"
-        >
-          <!-- 文章摘要 -->
-          <div
-            class="mb-10 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30 rounded-xl p-5 relative"
-          >
-            <div class="flex items-start gap-3">
-              <span class="text-2xl mt-1">📑</span>
-              <div>
-                <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-base">文章摘要</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed text-justify">
-                  {{ article.description || '暂无摘要...' }}
-                </p>
-              </div>
-            </div>
-            <!-- AI Tag -->
-            <div class="absolute top-3 right-3">
-              <span
-                class="text-[10px] px-2 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded shadow-sm"
-                >AI Summary</span
-              >
-            </div>
-          </div>
-
+        <!-- 卡片容器 (移除卡片样式) -->
+        <div class="w-full">
           <!-- 正文图片 (如果有) -->
           <div v-if="article.cover" class="rounded-xl overflow-hidden shadow-md mb-8 group">
             <img
@@ -174,7 +146,12 @@ onMounted(() => {
 
           <!-- 正文内容 -->
           <div class="article-content">
-            <MdPreview :editorId="previewId" :modelValue="article.content" previewTheme="default" />
+            <MdPreview
+              :editorId="previewId"
+              :modelValue="article.content"
+              :theme="editorTheme"
+              previewTheme="default"
+            />
           </div>
 
           <!-- 底部 - 版权与分享 -->
@@ -244,8 +221,69 @@ onMounted(() => {
 .article-content :deep(.md-editor-content) {
   background: transparent;
 }
-.dark .article-content :deep(.md-editor-content) {
-  background: transparent;
-  color: #e5e7eb;
+.article-content :deep(.md-editor-preview) {
+  font-family: 'Ma Shan Zheng', 'LXGW WenKai', serif;
+  word-break: break-all;
+}
+
+/* 让 md-editor 所有层级背景透明 */
+.article-content :deep(.md-editor) {
+  background: transparent !important;
+}
+.article-content :deep(.md-editor-preview-wrapper) {
+  background: transparent !important;
+}
+
+/* 暗黑模式下 Markdown 预览样式 - 模仿原作者风格 */
+:global(.dark) .article-content :deep(.md-editor) {
+  background: transparent !important;
+  --md-bk-color: transparent !important;
+}
+:global(.dark) .article-content :deep(.md-editor-content) {
+  background: transparent !important;
+}
+:global(.dark) .article-content :deep(.md-editor-preview-wrapper) {
+  background: transparent !important;
+}
+:global(.dark) .article-content :deep(.md-editor-preview) {
+  color: #c0caf5; /* 浅蓝灰色文字 */
+  background: transparent !important;
+}
+:global(.dark) .article-content :deep(.md-editor-preview h1),
+:global(.dark) .article-content :deep(.md-editor-preview h2),
+:global(.dark) .article-content :deep(.md-editor-preview h3),
+:global(.dark) .article-content :deep(.md-editor-preview h4),
+:global(.dark) .article-content :deep(.md-editor-preview h5),
+:global(.dark) .article-content :deep(.md-editor-preview h6) {
+  color: #e0e6ff; /* 更亮的标题 */
+}
+:global(.dark) .article-content :deep(.md-editor-preview p) {
+  color: #a9b1d6; /* 段落文字 */
+}
+:global(.dark) .article-content :deep(.md-editor-preview a) {
+  color: #7aa2f7; /* 链接颜色 */
+}
+:global(.dark) .article-content :deep(.md-editor-preview code) {
+  background: #24283b; /* 行内代码背景 */
+  color: #bb9af7; /* 行内代码文字 */
+}
+:global(.dark) .article-content :deep(.md-editor-preview pre) {
+  background: #24283b; /* 代码块背景 */
+  border: 1px solid #3b4261;
+}
+:global(.dark) .article-content :deep(.md-editor-preview blockquote) {
+  border-left-color: #7aa2f7;
+  background: rgba(122, 162, 247, 0.1);
+  color: #9aa5ce;
+}
+:global(.dark) .article-content :deep(.md-editor-preview table th) {
+  background: #24283b;
+  border-color: #3b4261;
+}
+:global(.dark) .article-content :deep(.md-editor-preview table td) {
+  border-color: #3b4261;
+}
+:global(.dark) .article-content :deep(.md-editor-preview hr) {
+  border-color: #3b4261;
 }
 </style>

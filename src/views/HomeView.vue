@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getArticleList, getCategoryList, getTagList, getSwiperList, getAuthorInfo } from '@/api'
+import {
+  getArticleList,
+  getCategoryList,
+  getTagList,
+  getSwiperList,
+  getAuthorInfo,
+  getRecordList,
+  getCategoryArticleCount,
+  getTagArticleCount,
+  getRandomArticles,
+} from '@/api'
 import type { Article } from '@/types/app/article'
 import type { Cate } from '@/types/app/cate'
 import type { Tag } from '@/types/app/tag'
 import type { Swiper } from '@/types/app/swiper'
 import type { User } from '@/types/app/user'
+import type { Record as RecordType } from '@/types/app/record'
 
 import Starry from '@/components/Starry/index.vue'
 import Typed from '@/components/Typed/index.vue'
@@ -14,11 +25,11 @@ import AppSwiper from '@/components/Swiper/index.vue'
 import Waves from '@/components/Waves/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import AstronautImg from '@/assets/image/astronaut.png'
-import BgImg from '@/assets/image/2.jpg'
-import Img8 from '@/assets/image/8.jpg'
-import Img9 from '@/assets/image/9.png'
-import ImgCat from '@/assets/image/cat.jpg'
+
+// 图床链接
+const BgImg = 'https://bu.dusays.com/2026/02/04/698346b1404a4.jpg' // 2.jpg
 
 // 数据状态
 const loading = ref(true)
@@ -28,12 +39,22 @@ const categories = ref<Cate[]>([])
 const tags = ref<Tag[]>([])
 const swipers = ref<Swiper[]>([])
 const author = ref<User | null>(null)
+const latestRecord = ref<RecordType | null>(null) // 最新闪念
 
 // 分页
 const page = ref(1)
-const size = ref(10)
+const size = ref(6)
 const total = ref(0)
 const totalPages = computed(() => Math.ceil(total.value / size.value))
+
+// 筛选状态
+const selectedCateId = ref<number | null>(null)
+const selectedTagId = ref<number | null>(null)
+const filterTitle = ref<string>('') // 显示当前筛选的名称
+
+// 分类和标签的文章数量统计（用名称作为键，因为 API 返回的可能没有 id）
+const categoryArticleCounts = ref<Record<string, number>>({})
+const tagArticleCounts = ref<Record<string, number>>({})
 
 // 打字机文本
 const typedStrings = ref([
@@ -50,48 +71,122 @@ const viewArticle = (id?: number) => {
   router.push({ name: 'article', params: { id } })
 }
 
+const handlePageChange = (newPage: number) => {
+  page.value = newPage
+  loadData()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const loadData = async () => {
   try {
     loading.value = true
 
-    const [articlesRes, categoriesRes, tagsRes, swipersRes, authorRes] = await Promise.all([
-      getArticleList({ page: page.value, size: size.value, isDraft: 0, isDel: 0 }),
-      getCategoryList('recursion'),
-      getTagList(),
-      getSwiperList(),
-      getAuthorInfo(),
-    ])
-
-    const articleData = articlesRes.data
-    articles.value = articleData.result || []
-    total.value = articleData.total || 0
+    // 1. 先获取基础配置数据（分类、标签、作者等）
+    const [categoriesRes, tagsRes, swipersRes, authorRes, recordsRes, cateCountRes, tagCountRes] =
+      await Promise.all([
+        getCategoryList('recursion'),
+        getTagList(),
+        getSwiperList(),
+        getAuthorInfo(),
+        getRecordList({}),
+        getCategoryArticleCount(),
+        getTagArticleCount(),
+      ])
 
     categories.value = categoriesRes.data || []
     tags.value = tagsRes.data || []
-
-    // 静态覆盖轮播图数据
-    swipers.value = [
-      {
-        id: 1,
-        image: Img8,
-        title: '2025 年终总结',
-        description: '2025 即将落幕，按照以往的惯例 是时候对这一年的成长画上一个圆满的句号了',
-      },
-      {
-        id: 2,
-        image: Img9,
-        title: 'Memory Blog 现代化博客系统',
-        description: '年轻、高颜值、全开源、永不收费的现代化博客系统',
-      },
-      {
-        id: 3,
-        image: ImgCat,
-        title: '对 AI 的看法与思考',
-        description: '从8月份接触到现在，已经快半年了，今天找一期文章，来谈一谈我对 AI 的理解...',
-      },
-    ] as any
-
+    swipers.value = (swipersRes.data || []) as any // 如果 swipersRes 是空的，后续会被覆盖
     author.value = authorRes.data || null
+
+    // 2. 确定文章查询参数
+    let querySize = size.value
+    let targetCateId = selectedCateId.value
+    let randomArticlesFn = null
+
+    // 如果是首页（无筛选）
+    if (!targetCateId && !selectedTagId.value) {
+      // 首页展示全量文章，但也混入随机推荐
+      // 首页展示 6 篇：假设 4 篇列表文章 + 2 篇随机
+      querySize = Math.max(1, size.value - 2)
+      // 准备获取随机文章
+      randomArticlesFn = getRandomArticles(2)
+    }
+
+    // 3. 获取文章列表和随机文章
+    const [articlesRes, randomRes] = await Promise.all([
+      getArticleList({
+        page: page.value,
+        size: querySize,
+        isDraft: 0,
+        isDel: 0,
+        cateId: targetCateId || undefined, // 只有当用户点击了侧边栏筛选时才传 ID
+        tagId: selectedTagId.value || undefined,
+      }),
+      randomArticlesFn ? randomArticlesFn : Promise.resolve({ data: [] }),
+    ])
+
+    let articleData = articlesRes.data
+    let currentArticles = articleData.result || []
+
+    // 4. 如果有随机文章，混合进去
+    if (randomRes && randomRes.data && randomRes.data.length > 0) {
+      const randoms = randomRes.data
+      const firstRandom = randoms[0]
+      const secondRandom = randoms[1]
+
+      // 简单插入：插在第2个和第4个位置
+      if (currentArticles.length > 0 && firstRandom) {
+        currentArticles.splice(1, 0, firstRandom)
+      }
+
+      if (secondRandom) {
+        if (currentArticles.length > 3) {
+          currentArticles.splice(3, 0, secondRandom)
+        } else {
+          currentArticles.push(secondRandom)
+        }
+      }
+    }
+
+    articles.value = currentArticles
+    total.value = articleData.total || 0 // 注意：总数这里可能不准确了，因为混合了随机文章，但在首页展示中通常可以接受
+
+    // 处理分类文章数量统计（用名称作为键）
+    if (cateCountRes.data) {
+      const counts: Record<string, number> = {}
+      if (Array.isArray(cateCountRes.data)) {
+        cateCountRes.data.forEach((item: { id?: number; name: string; count: number }) => {
+          if (item.name) {
+            counts[item.name] = item.count || 0
+          }
+        })
+      }
+      categoryArticleCounts.value = counts
+    }
+
+    // 处理标签文章数量统计（用名称作为键）
+    if (tagCountRes.data) {
+      const counts: Record<string, number> = {}
+      if (Array.isArray(tagCountRes.data)) {
+        tagCountRes.data.forEach((item: { id?: number; name: string; count: number }) => {
+          if (item.name) {
+            counts[item.name] = item.count || 0
+          }
+        })
+      }
+      tagArticleCounts.value = counts
+    }
+
+    // 获取最新的一条闪念
+    const records = recordsRes.data || []
+    if (records.length > 0) {
+      // 按创建时间降序排序，获取最新的一条
+      const sortedRecords = records.sort(
+        (a: RecordType, b: RecordType) =>
+          new Date(b.createTime || 0).getTime() - new Date(a.createTime || 0).getTime(),
+      )
+      latestRecord.value = sortedRecords[0] || null
+    }
   } catch (err) {
     console.error('Data load failed:', err)
   } finally {
@@ -106,6 +201,35 @@ const changePage = (p: number) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+// 按分类筛选文章
+const filterByCategory = (cateId: number, cateName: string) => {
+  selectedCateId.value = cateId
+  selectedTagId.value = null
+  filterTitle.value = cateName
+  page.value = 1
+  loadData()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// 按标签筛选文章
+const filterByTag = (tagId: number, tagName: string) => {
+  selectedTagId.value = tagId
+  selectedCateId.value = null
+  filterTitle.value = tagName
+  page.value = 1
+  loadData()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// 清除筛选
+const clearFilter = () => {
+  selectedCateId.value = null
+  selectedTagId.value = null
+  filterTitle.value = ''
+  page.value = 1
+  loadData()
+}
+
 onMounted(() => {
   loadData()
 })
@@ -113,7 +237,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="home-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 selection:bg-blue-500 selection:text-white"
+    class="home-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300 selection:bg-blue-500 selection:text-white"
   >
     <!-- 1. 全局星空背景 -->
     <Starry />
@@ -193,14 +317,61 @@ onMounted(() => {
           >
             <AppSwiper :data="swipers" />
           </div>
-          <!-- 文章列表标题 -->
+
+          <!-- 最新动态横幅 -->
+          <router-link v-if="latestRecord" to="/moments" class="block mt-6 group">
+            <div
+              class="flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-200/50 dark:border-amber-700/30 rounded-xl hover:shadow-lg transition-all duration-300 hover:border-amber-300 dark:hover:border-amber-600/50"
+            >
+              <!-- 星标图标 -->
+              <span class="text-xl flex-shrink-0">⭐</span>
+              <!-- 标签 -->
+              <span
+                class="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 rounded flex-shrink-0"
+              >
+                最新动态
+              </span>
+              <!-- 内容 -->
+              <span
+                class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors"
+              >
+                {{ latestRecord.content }}
+              </span>
+              <!-- 箭头 -->
+              <svg
+                class="w-4 h-4 text-amber-500 flex-shrink-0 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </div>
+          </router-link>
+
+          <!-- 筛选提示 -->
           <div
-            class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700/50 pb-4 mb-8 mt-12"
+            v-if="filterTitle && !loading"
+            class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 rounded-xl px-5 py-3 mt-6"
           >
-            <h2 class="text-xl font-bold flex items-center gap-2">
-              <span class="text-2xl">📝</span> 最新文章
-            </h2>
-            <span class="text-gray-400 text-xs">共 {{ total }} 篇</span>
+            <div class="flex items-center gap-2">
+              <span class="text-blue-600 dark:text-blue-400">🔍</span>
+              <span class="text-sm text-blue-700 dark:text-blue-300">
+                当前筛选：<strong>{{ filterTitle }}</strong>
+              </span>
+              <span class="text-xs text-blue-500 dark:text-blue-400"> 共 {{ total }} 篇文章 </span>
+            </div>
+            <button
+              @click="clearFilter"
+              class="text-xs px-3 py-1 bg-blue-100 dark:bg-blue-800/50 hover:bg-blue-200 dark:hover:bg-blue-700/50 text-blue-600 dark:text-blue-300 rounded-lg transition-colors"
+            >
+              清除筛选
+            </button>
           </div>
 
           <div v-if="loading" class="text-center py-20 text-gray-500 animate-pulse">
@@ -283,29 +454,31 @@ onMounted(() => {
           </div>
 
           <!-- 分页 -->
-          <div v-if="totalPages > 1" class="flex justify-center mt-12 gap-2">
-            <button
-              @click="changePage(page - 1)"
-              :disabled="page === 1"
-              class="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-blue-50 dark:hover:bg-gray-700 transition"
-            >
-              上一页
-            </button>
-            <span class="px-4 py-2 text-blue-500 font-bold">{{ page }} / {{ totalPages }}</span>
-            <button
-              @click="changePage(page + 1)"
-              :disabled="page === totalPages"
-              class="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-blue-50 dark:hover:bg-gray-700 transition"
-            >
-              下一页
-            </button>
-          </div>
+          <Pagination
+            v-if="totalPages > 1"
+            :page="page"
+            :total="totalPages"
+            :customHandler="true"
+            @change="handlePageChange"
+            className="mt-12"
+          />
         </main>
 
         <!-- 右侧边栏 (占 3 列) -->
         <aside class="lg:col-span-3">
           <!-- 复用通用侧边栏 -->
-          <AppSidebar :author="author" :categories="categories" :tags="tags" />
+          <AppSidebar
+            :author="author"
+            :categories="categories"
+            :tags="tags"
+            :category-article-counts="categoryArticleCounts"
+            :tag-article-counts="tagArticleCounts"
+            :selected-cate-id="selectedCateId"
+            :selected-tag-id="selectedTagId"
+            @filter-category="filterByCategory"
+            @filter-tag="filterByTag"
+            @clear-filter="clearFilter"
+          />
         </aside>
       </div>
     </div>

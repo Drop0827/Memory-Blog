@@ -47,7 +47,7 @@ const getRandomGradient = () => {
 
 <template>
   <div
-    class="wall-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300"
+    class="wall-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300"
   >
     <Starry />
     <AppNavbar :transparent="false" />

@@ -26,24 +26,32 @@ onMounted(() => {
 })
 
 const getRandomColor = () => {
-  const colors = ['bg-orange-100 text-orange-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-pink-100 text-pink-600']
+  const colors = [
+    'bg-orange-100 text-orange-600',
+    'bg-blue-100 text-blue-600',
+    'bg-green-100 text-green-600',
+    'bg-purple-100 text-purple-600',
+    'bg-pink-100 text-pink-600',
+  ]
   return colors[Math.floor(Math.random() * colors.length)]
 }
 </script>
 
 <template>
-  <div class="fishpond-view min-h-screen bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+  <div
+    class="fishpond-view min-h-screen bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5] font-sans transition-colors duration-300"
+  >
     <Starry />
     <AppNavbar :transparent="false" />
 
     <div class="container mx-auto px-4 lg:px-8 max-w-[1000px] py-24 relative z-10">
       <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
+        <h1
+          class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent"
+        >
           我的鱼塘
         </h1>
-        <p class="text-gray-500 dark:text-gray-400 text-lg">
-          聚合订阅，探索未知的知识海洋
-        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">聚合订阅，探索未知的知识海洋</p>
       </div>
 
       <div v-if="loading" class="text-center py-20 opacity-60">
@@ -60,14 +68,20 @@ const getRandomColor = () => {
         >
           <div class="flex items-start justify-between mb-4">
             <div class="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5 p-1">
-               <img :src="item.image || '/logo.png'" class="w-full h-full object-contain" @error="(e:any) => e.target.src='/logo.png'" />
+              <img
+                :src="item.image || '/logo.png'"
+                class="w-full h-full object-contain"
+                @error="(e: any) => (e.target.src = '/logo.png')"
+              />
             </div>
             <span class="text-xs px-2 py-1 rounded-md font-medium" :class="getRandomColor()">
               {{ item.type || 'RSS' }}
             </span>
           </div>
 
-          <h3 class="font-bold text-lg mb-2 group-hover:text-blue-500 transition-colors line-clamp-1">
+          <h3
+            class="font-bold text-lg mb-2 group-hover:text-blue-500 transition-colors line-clamp-1"
+          >
             {{ item.title }}
           </h3>
 
@@ -77,7 +91,9 @@ const getRandomColor = () => {
 
           <div class="flex items-center gap-2 text-xs text-gray-400">
             <span>👤 {{ item.author || '未知作者' }}</span>
-            <span v-if="item.createTime">• {{ new Date(Number(item.createTime)).toLocaleDateString() }}</span>
+            <span v-if="item.createTime"
+              >• {{ new Date(Number(item.createTime)).toLocaleDateString() }}</span
+            >
           </div>
         </a>
       </div>

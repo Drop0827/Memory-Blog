@@ -1,5 +1,32 @@
 <script setup lang="ts">
-// 这是一个纯展示组件，没有复杂的逻辑
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useConfigStore } from '@/stores'
+
+// 获取暗黑模式状态
+const configStore = useConfigStore()
+const { isDark } = storeToRefs(configStore)
+
+// 根据暗黑模式计算波浪颜色
+const waveColors = computed(() => {
+  if (isDark.value) {
+    // 暗黑模式 - 使用柔和的深灰蓝色匹配原作者风格
+    return {
+      wave1: 'rgba(26, 27, 38, 0.7)',
+      wave2: 'rgba(26, 27, 38, 0.5)',
+      wave3: 'rgba(26, 27, 38, 0.3)',
+      wave4: '#1a1b26',
+    }
+  } else {
+    // 亮色模式 - 使用白色
+    return {
+      wave1: 'rgba(255, 255, 255, 0.7)',
+      wave2: 'rgba(255, 255, 255, 0.5)',
+      wave3: 'rgba(255, 255, 255, 0.3)',
+      wave4: '#fff',
+    }
+  }
+})
 </script>
 
 <template>
@@ -19,10 +46,10 @@
         />
       </defs>
       <g class="parallax">
-        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
-        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+        <use xlink:href="#gentle-wave" x="48" y="0" :fill="waveColors.wave1" />
+        <use xlink:href="#gentle-wave" x="48" y="3" :fill="waveColors.wave2" />
+        <use xlink:href="#gentle-wave" x="48" y="5" :fill="waveColors.wave3" />
+        <use xlink:href="#gentle-wave" x="48" y="7" :fill="waveColors.wave4" />
       </g>
     </svg>
   </div>
@@ -39,7 +66,6 @@
 }
 
 /* Animation */
-
 .parallax > use {
   animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
 }
@@ -66,20 +92,6 @@
   100% {
     transform: translate3d(85px, 0, 0);
   }
-}
-
-/* Dark mode adjustment for the last wave to match background */
-:global(.dark) .parallax > use:nth-child(4) {
-  fill: #0d1320; /* 假设暗黑模式背景是这个颜色 */
-}
-:global(.dark) .parallax > use:nth-child(1) {
-  fill: rgba(13, 19, 32, 0.7);
-}
-:global(.dark) .parallax > use:nth-child(2) {
-  fill: rgba(13, 19, 32, 0.5);
-}
-:global(.dark) .parallax > use:nth-child(3) {
-  fill: rgba(13, 19, 32, 0.3);
 }
 
 /*Shrinking for mobile*/

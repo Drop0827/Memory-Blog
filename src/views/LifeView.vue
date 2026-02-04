@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0d1320] text-gray-900 dark:text-gray-100"
+    class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#1a1b26] text-gray-900 dark:text-[#c0caf5]"
   >
     <div class="text-center">
       <h1 class="text-4xl font-bold mb-4">🍃 生活随笔</h1>
