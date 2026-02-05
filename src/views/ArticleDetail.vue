@@ -9,7 +9,7 @@ import AppNavbar from '@/components/Layout/AppNavbar.vue'
 import AppSidebar from '@/components/Layout/AppSidebar.vue' // Reuse Sidebar if possible, or just build a simple layout
 import Starry from '@/components/Starry/index.vue'
 import Waves from '@/components/Waves/index.vue'
-const BgImg = 'https://bu.dusays.com/2026/02/04/698346b1404a4.jpg' // 2.jpg
+const BgImg = 'https://bu.dusays.com/2026/02/04/698346c017609.jpg' // cat.jpg - 使用不同于首页的背景
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 

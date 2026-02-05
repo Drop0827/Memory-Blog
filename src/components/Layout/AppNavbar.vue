@@ -39,26 +39,23 @@ onUnmounted(() => {
 
 <template>
   <header
-    class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5"
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
     :class="
       isScrolled || !transparent
-        ? 'bg-[#1a1b26]/90 backdrop-blur-md h-16 shadow-lg'
+        ? 'bg-[#1a1b26]/90 h-16 shadow-lg border-b border-white/10'
         : 'bg-transparent h-20'
     "
   >
     <div
       class="container mx-auto px-4 lg:px-12 h-full flex items-center justify-between max-w-[1250px] relative"
     >
-      <!-- Logo / 标题区 -->
-      <router-link to="/" class="flex items-center gap-3 cursor-pointer group z-20">
-        <span class="text-3xl filter drop-shadow-lg group-hover:rotate-12 transition-transform"
-          >⚡</span
-        >
-        <h1
-          class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent tracking-wide"
-        >
-          Memory
-        </h1>
+      <!-- Logo 区 -->
+      <router-link to="/" class="flex-shrink-0 cursor-pointer group z-20">
+        <img
+          src="https://bu.dusays.com/2026/02/05/6984aa91b33c9.webp"
+          alt="Memory Blog Logo"
+          class="h-6 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+        />
       </router-link>
 
       <!-- 导航菜单 (Centered) -->
@@ -107,13 +104,13 @@ onUnmounted(() => {
         >
           <span>👨‍💻</span> 关于我
         </router-link>
-        <a
-          href="https://www.google.com"
-          target="_blank"
+        <router-link
+          to="/memories"
           class="px-3 py-2 rounded-full hover:text-blue-500 hover:bg-black/5 dark:hover:text-white dark:hover:bg-white/10 transition-all duration-300 flex items-center gap-1"
+          active-class="text-blue-500 bg-blue-50 dark:bg-white/10 dark:text-white"
         >
           <span>📼</span> 心之所向
-        </a>
+        </router-link>
       </nav>
 
       <!-- 右侧功能区 (Explore + Theme) -->

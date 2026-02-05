@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
-// 图床链接
-const Img1 = 'https://bu.dusays.com/2026/02/04/698346b2079d6.jpg' // 1.jpg
-const Img3 = 'https://bu.dusays.com/2026/02/04/698346b3e9880.png' // 3.png
-const Img4 = 'https://bu.dusays.com/2026/02/04/698346b17d6e5.jpg' // 4.jpg
-const Img5 = 'https://bu.dusays.com/2026/02/04/698346b1530ec.jpg' // 5.jpg
-
-const contrastImgs = [Img1, Img3, Img4, Img5]
-
-const getRandomImage = () => {
-  const index = Math.floor(Math.random() * contrastImgs.length)
-  return contrastImgs[index]
+// 图床链接 - 为每个页面分配固定的不同背景图片
+const BgImages = {
+  notes: 'https://bu.dusays.com/2026/02/04/698346b2079d6.jpg', // 1.jpg - 开发笔记
+  life: 'https://bu.dusays.com/2026/02/04/698346b3e9880.png', // 3.jpg - 生活随笔
+  university: 'https://bu.dusays.com/2026/02/04/698346b17d6e5.jpg', // 4.jpg - 大学生活
+  timeline: 'https://bu.dusays.com/2026/02/04/698346b1530ec.jpg', // 5.jpg - 开发历程
+  statistics: 'https://bu.dusays.com/2026/02/04/698346b16d065.jpg', // 6.jpg - 网站统计
+  footprints: 'https://bu.dusays.com/2026/02/04/698346b17c425.png', // 7.jpg - 我的足迹
+  tags: 'https://bu.dusays.com/2026/02/04/698346b2163ae.jpg', // 8.jpg - 标签云
+  devices: 'https://bu.dusays.com/2026/02/04/698346b4ee9f4.png', // 9.jpg - 我的设备
+  resume: 'https://bu.dusays.com/2026/02/04/698346c017609.jpg', // cat.jpg - 我的履历
 }
 
 const router = createRouter({
@@ -28,7 +28,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '开发笔记',
-        coverImage: getRandomImage(),
+        coverImage: BgImages.notes,
       },
     },
     {
@@ -37,7 +37,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '生活随笔',
-        coverImage: getRandomImage(),
+        coverImage: BgImages.life,
       },
     },
     {
@@ -46,7 +46,7 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '大学生活',
-        coverImage: getRandomImage(),
+        coverImage: BgImages.university,
       },
     },
     {
@@ -55,13 +55,18 @@ const router = createRouter({
       component: () => import('../views/ColumnView.vue'),
       props: {
         title: '开发历程',
-        coverImage: getRandomImage(),
+        coverImage: BgImages.timeline,
       },
     },
     {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/memories',
+      name: 'memories',
+      component: () => import('../views/MemoriesView.vue'),
     },
     {
       path: '/friends',
@@ -92,31 +97,31 @@ const router = createRouter({
       path: '/statistics',
       name: 'statistics',
       component: () => import('../views/ColumnView.vue'),
-      props: { title: '网站统计', coverImage: getRandomImage() },
+      props: { title: '网站统计', coverImage: BgImages.statistics },
     },
     {
       path: '/footprints',
       name: 'footprints',
       component: () => import('../views/ColumnView.vue'),
-      props: { title: '我的足迹', coverImage: getRandomImage() },
+      props: { title: '我的足迹', coverImage: BgImages.footprints },
     },
     {
       path: '/tags',
       name: 'tags',
       component: () => import('../views/ColumnView.vue'),
-      props: { title: '标签云', coverImage: getRandomImage() },
+      props: { title: '标签云', coverImage: BgImages.tags },
     },
     {
       path: '/devices',
       name: 'devices',
       component: () => import('../views/ColumnView.vue'),
-      props: { title: '我的设备', coverImage: getRandomImage() },
+      props: { title: '我的设备', coverImage: BgImages.devices },
     },
     {
       path: '/resume',
       name: 'resume',
       component: () => import('../views/ColumnView.vue'),
-      props: { title: '我的履历', coverImage: getRandomImage() },
+      props: { title: '我的履历', coverImage: BgImages.resume },
     },
   ],
 })
