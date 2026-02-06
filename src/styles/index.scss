@@ -190,3 +190,22 @@ body {
 //         transition-duration: 0s !important;
 //     }
 // }
+
+// 隐藏滚动条样式（用于特定元素）
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE 和 Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+// 关于页面主色调
+.text-primary {
+  color: #539dfd;
+}
+
+.bg-primary {
+  background-color: #539dfd;
+}

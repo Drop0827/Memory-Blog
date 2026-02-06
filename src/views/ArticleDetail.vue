@@ -135,14 +135,7 @@ onMounted(() => {
       <div v-else-if="article">
         <!-- 卡片容器 (移除卡片样式) -->
         <div class="w-full">
-          <!-- 正文图片 (如果有) -->
-          <div v-if="article.cover" class="rounded-xl overflow-hidden shadow-md mb-8 group">
-            <img
-              :src="article.cover"
-              class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-              alt="Article Image"
-            />
-          </div>
+          <!-- 封面图片已隐藏，不在详情页显示 -->
 
           <!-- 正文内容 -->
           <div class="article-content">
@@ -285,5 +278,27 @@ onMounted(() => {
 }
 :global(.dark) .article-content :deep(.md-editor-preview hr) {
   border-color: #3b4261;
+}
+
+/* 文章内图片样式 - 居中显示、限制宽度、圆角 */
+.article-content :deep(.md-editor-preview img) {
+  display: block;
+  max-width: 90%;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.article-content :deep(.md-editor-preview img:hover) {
+  transform: scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+:global(.dark) .article-content :deep(.md-editor-preview img) {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+:global(.dark) .article-content :deep(.md-editor-preview img:hover) {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 </style>

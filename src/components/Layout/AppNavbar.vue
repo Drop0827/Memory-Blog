@@ -50,11 +50,11 @@ onUnmounted(() => {
       class="container mx-auto px-4 lg:px-12 h-full flex items-center justify-between max-w-[1250px] relative"
     >
       <!-- Logo 区 -->
-      <router-link to="/" class="flex-shrink-0 cursor-pointer group z-20">
+      <router-link to="/" class="flex items-center cursor-pointer group z-20 flex-shrink-0">
         <img
-          src="https://bu.dusays.com/2026/02/05/6984aa91b33c9.webp"
+          src="https://bu.dusays.com/2026/02/06/6985b746c93fd.png"
           alt="Memory Blog Logo"
-          class="h-6 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+          class="h-12 object-contain group-hover:scale-105 transition-transform duration-300"
         />
       </router-link>
 

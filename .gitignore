@@ -29,3 +29,6 @@ build/
 # 临时文件
 *.tmp
 *.temp
+
+# 原作者源码参考（不提交）
+my_page_template-main/
