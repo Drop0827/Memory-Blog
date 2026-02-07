@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import AMapContainer from '@/components/AMapContainer/index.vue'
 
 // 当前选中的标签
 const activeTab = ref<'albums' | 'footprints'>('albums')
@@ -97,10 +98,12 @@ const stats = computed(() => ({
   <div class="memories-page min-h-screen bg-[#0f1117] pt-24 pb-12">
     <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
       <!-- 页面标题和标签切换 -->
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+      <div class="flex flex-col items-center justify-center gap-6 mb-10 text-center">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">回忆录</h1>
-          <p class="text-gray-400">
+          <h1 v-if="activeTab !== 'footprints'" class="text-3xl font-bold text-white mb-2">
+            回忆录
+          </h1>
+          <p v-if="activeTab !== 'footprints'" class="text-gray-400">
             <template v-if="activeTab === 'albums'"> 共 {{ stats.totalAlbums }} 个相册 </template>
             <template v-else>
               共 {{ stats.totalProvinces }} 个省份，{{ stats.totalCities }} 个城市
@@ -109,7 +112,14 @@ const stats = computed(() => ({
         </div>
 
         <!-- 标签切换 -->
-        <div class="flex items-center bg-white/5 rounded-full p-1 border border-white/10">
+        <div
+          class="flex items-center bg-white/5 rounded-full p-1 border border-white/10 transition-all duration-300"
+          :class="
+            activeTab === 'footprints'
+              ? 'fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#1a1b26]/80 backdrop-blur-md shadow-lg'
+              : ''
+          "
+        >
           <button
             @click="activeTab = 'albums'"
             class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300"
@@ -180,51 +190,8 @@ const stats = computed(() => ({
         </div>
       </div>
 
-      <!-- 足迹网格 -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div
-          v-for="footprint in footprints"
-          :key="footprint.id"
-          class="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
-        >
-          <!-- 封面图 -->
-          <img
-            :src="footprint.cover"
-            :alt="footprint.name"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-
-          <!-- 渐变遮罩 -->
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
-          ></div>
-
-          <!-- 足迹信息 -->
-          <div class="absolute bottom-0 left-0 right-0 p-4">
-            <h3 class="text-white font-bold text-xl mb-2">{{ footprint.name }}</h3>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="city in footprint.cities.slice(0, 3)"
-                :key="city"
-                class="px-2 py-1 bg-white/10 rounded text-xs text-gray-300"
-              >
-                {{ city }}
-              </span>
-              <span
-                v-if="footprint.cities.length > 3"
-                class="px-2 py-1 bg-white/10 rounded text-xs text-gray-300"
-              >
-                +{{ footprint.cities.length - 3 }}
-              </span>
-            </div>
-          </div>
-
-          <!-- 悬浮效果 -->
-          <div
-            class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          ></div>
-        </div>
-      </div>
+      <!-- 足迹地图 (全屏展示) -->
+      <AMapContainer v-if="activeTab === 'footprints'" isFullScreen />
 
       <!-- 空状态 -->
       <div

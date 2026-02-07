@@ -145,20 +145,11 @@ onUnmounted(() => {
               class="bg-white dark:bg-[#1e2530] rounded-xl shadow-xl border border-gray-100 dark:border-white/5 overflow-hidden py-1"
             >
               <router-link
-                to="/statistics"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-blue-500 transition-colors"
-                >📊 统计</router-link
-              >
-              <router-link
                 to="/moments"
                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-blue-500 transition-colors"
                 >🏔️ 闪念</router-link
               >
-              <router-link
-                to="/footprints"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-blue-500 transition-colors"
-                >👣 足迹</router-link
-              >
+              <!-- Footprints menu item removed -->
               <router-link
                 to="/friends"
                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-blue-500 transition-colors"

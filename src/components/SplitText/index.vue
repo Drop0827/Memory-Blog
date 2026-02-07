@@ -1,9 +1,4 @@
 <script setup lang="ts">
-/**
- * SplitText 文字分割动画组件
- * 基于原作者的 React 版本移植到 Vue 3
- * 使用 GSAP 实现文字逐字/逐词出现动画
- */
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'

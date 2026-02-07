@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { getRecordList } from '@/api'
 import type { Record as LogRecord } from '@/types/app/record'
 import Starry from '@/components/Starry/index.vue'
@@ -8,6 +8,58 @@ import AppFooter from '@/components/Footer/index.vue'
 
 const loading = ref(true)
 const moments = ref<LogRecord[]>([])
+
+// Preview State
+const previewVisible = ref(false)
+const previewImages = ref<string[]>([])
+const previewIndex = ref(0)
+
+const openPreview = (images: string[], index: number) => {
+  if (!images || images.length === 0) return
+  previewImages.value = images
+  previewIndex.value = index
+  previewVisible.value = true
+  document.body.style.overflow = 'hidden' // Prevent background scrolling
+}
+
+const closePreview = () => {
+  previewVisible.value = false
+  document.body.style.overflow = ''
+}
+
+const nextImage = () => {
+  if (previewIndex.value < previewImages.value.length - 1) {
+    previewIndex.value++
+  } else {
+    previewIndex.value = 0 // Loop to start
+  }
+}
+
+const prevImage = () => {
+  if (previewIndex.value > 0) {
+    previewIndex.value--
+  } else {
+    previewIndex.value = previewImages.value.length - 1 // Loop to end
+  }
+}
+
+// Keyboard navigation
+const handleKeydown = (e: KeyboardEvent) => {
+  if (!previewVisible.value) return
+
+  if (e.key === 'Escape') closePreview()
+  if (e.key === 'ArrowRight') nextImage()
+  if (e.key === 'ArrowLeft') prevImage()
+}
+
+onMounted(() => {
+  loadData()
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 
 const formatTime = (time: string | undefined) => {
   if (!time) return ''
@@ -18,17 +70,32 @@ const loadData = async () => {
   try {
     loading.value = true
     const res = await getRecordList()
-    moments.value = res.data || []
+    moments.value = (res.data || []).map((item: any) => {
+      let imgs: string[] = []
+      if (typeof item.images === 'string') {
+        try {
+          if (item.images.trim().startsWith('[')) {
+            imgs = JSON.parse(item.images)
+          } else if (item.images.trim()) {
+            imgs = [item.images]
+          }
+        } catch (e) {
+          console.error('Failed to parse images', item.images)
+        }
+      } else if (Array.isArray(item.images)) {
+        imgs = item.images
+      }
+      return {
+        ...item,
+        images: imgs,
+      }
+    })
   } catch (err) {
     console.error('Failed to load moments', err)
   } finally {
     loading.value = false
   }
 }
-
-onMounted(() => {
-  loadData()
-})
 </script>
 
 <template>
@@ -78,18 +145,27 @@ onMounted(() => {
               {{ moment.content }}
             </div>
 
-            <div v-if="moment.images" class="grid grid-cols-2 md:grid-cols-3 gap-2">
-              <template v-if="Array.isArray(moment.images)">
+            <!-- Modified image rendering logic based on array length -->
+            <div v-if="moment.images && moment.images.length > 0" class="mt-4">
+              <!-- Single Image -->
+              <div v-if="moment.images.length === 1">
+                <img
+                  :src="moment.images[0]"
+                  class="rounded-lg object-cover max-h-60 w-auto cursor-zoom-in hover:opacity-90 transition-opacity"
+                  @click="openPreview(moment.images as string[], 0)"
+                />
+              </div>
+
+              <!-- Multiple Images Grid -->
+              <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-2">
                 <img
                   v-for="(img, idx) in moment.images"
                   :key="idx"
                   :src="img"
                   class="rounded-lg object-cover aspect-square w-full h-full cursor-zoom-in hover:opacity-90 transition-opacity"
+                  @click="openPreview(moment.images as string[], idx)"
                 />
-              </template>
-              <template v-else-if="moment.images">
-                <img :src="moment.images" class="rounded-lg object-cover max-h-60 w-auto" />
-              </template>
+              </div>
             </div>
           </div>
         </div>
@@ -103,5 +179,98 @@ onMounted(() => {
     </div>
 
     <AppFooter />
+
+    <!-- Image Preview Modal -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="previewVisible"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+        @click="closePreview"
+      >
+        <!-- Close Button -->
+        <button
+          class="absolute top-6 right-6 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors z-[101]"
+          @click="closePreview"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <!-- Navigation Buttons -->
+        <button
+          v-if="previewImages.length > 1"
+          class="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors z-[101]"
+          @click.stop="prevImage"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button
+          v-if="previewImages.length > 1"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors z-[101]"
+          @click.stop="nextImage"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <!-- Image Container -->
+        <div class="relative max-w-[90vw] max-h-[90vh]" @click.stop>
+          <img
+            :src="previewImages[previewIndex]"
+            class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl select-none"
+            draggable="false"
+          />
+          <div
+            v-if="previewImages.length > 1"
+            class="absolute bottom-[-40px] left-1/2 -translate-x-1/2 text-white/80 font-medium"
+          >
+            {{ previewIndex + 1 }} / {{ previewImages.length }}
+          </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>

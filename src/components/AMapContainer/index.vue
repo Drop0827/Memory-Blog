@@ -21,16 +21,18 @@ interface Props {
   center?: [number, number]
   markerPosition?: [number, number]
   zoom?: number
+  isFullScreen?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  securityJsCode: 'c8c59309d679d989a8a56461956cdd38',
-  apiKey: 'dad939358a9a25219a1c42c8d62cb218',
+  securityJsCode: import.meta.env.VITE_AMAP_SECURITY_JS_CODE,
+  apiKey: import.meta.env.VITE_AMAP_KEY,
   center: () => [117.853829, 29.922533],
   markerPosition: () => [121.853829, 29.922533],
   zoom: 6.8,
 })
 
+const mapId = `amap-${Math.random().toString(36).substr(2, 9)}`
 const isLoading = ref(true)
 let map: any = null
 
@@ -45,7 +47,7 @@ onMounted(() => {
     plugins: ['AMap.Scale', 'AMap.Marker', 'AMap.InfoWindow'],
   })
     .then((AMap) => {
-      map = new AMap.Map('amap-container', {
+      map = new AMap.Map(mapId, {
         mapStyle: 'amap://styles/grey',
         viewMode: '3D',
         zoom: props.zoom,
@@ -82,20 +84,28 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-[700px] border border-gray-800 rounded-3xl mt-10 relative overflow-hidden">
-    <!-- 加载状态 -->
+  <Teleport to="body" :disabled="!isFullScreen">
     <div
-      v-if="isLoading"
-      class="absolute inset-0 flex items-center justify-center bg-black/80 z-10"
+      :class="[
+        isFullScreen
+          ? 'fixed inset-0 h-screen w-screen z-0'
+          : 'w-full h-[700px] border border-gray-800 rounded-3xl mt-10 relative overflow-hidden',
+      ]"
     >
-      <div class="text-center">
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"
-        ></div>
-        <p class="text-white">地图加载中...</p>
+      <!-- 加载状态 -->
+      <div
+        v-if="isLoading"
+        class="absolute inset-0 flex items-center justify-center bg-black/80 z-10"
+      >
+        <div class="text-center">
+          <div
+            class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"
+          ></div>
+          <p class="text-white">地图加载中...</p>
+        </div>
       </div>
+      <!-- 地图容器 -->
+      <div :id="mapId" class="w-full h-full"></div>
     </div>
-    <!-- 地图容器 -->
-    <div id="amap-container" class="w-full h-full"></div>
-  </div>
+  </Teleport>
 </template>
