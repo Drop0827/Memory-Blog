@@ -4,7 +4,6 @@ import { getWallList } from '@/api'
 import type { Wall } from '@/types/app/wall'
 import Starry from '@/components/Starry/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
-import AppFooter from '@/components/Footer/index.vue'
 
 const loading = ref(true)
 const messages = ref<Wall[]>([])
@@ -109,7 +108,5 @@ const getRandomGradient = () => {
         <p class="text-gray-500">还没有留言哦，快来抢沙发吧！</p>
       </div>
     </div>
-
-    <AppFooter />
   </div>
 </template>

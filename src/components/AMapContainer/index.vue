@@ -22,6 +22,11 @@ interface Props {
   markerPosition?: [number, number]
   zoom?: number
   isFullScreen?: boolean
+  footprints?: Array<{
+    position: [number, number]
+    image: string
+    title: string
+  }>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -30,11 +35,16 @@ const props = withDefaults(defineProps<Props>(), {
   center: () => [117.853829, 29.922533],
   markerPosition: () => [121.853829, 29.922533],
   zoom: 6.8,
+  footprints: () => [],
 })
 
 const mapId = `amap-${Math.random().toString(36).substr(2, 9)}`
 const isLoading = ref(true)
 let map: any = null
+
+const emit = defineEmits<{
+  (e: 'select-image', imageUrl: string): void
+}>()
 
 onMounted(() => {
   window._AMapSecurityConfig = {
@@ -54,21 +64,56 @@ onMounted(() => {
         center: props.center,
       })
 
-      // 添加标记点
-      const marker = new AMap.Marker({
-        position: props.markerPosition,
-        title: '目标位置',
-        icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-        offset: new AMap.Pixel(-10, -30),
-      })
+      // 如果提供了 footprints 列表，则渲染多个自定义头像 Marker
+      if (props.footprints && props.footprints.length > 0) {
+        props.footprints.forEach((fp) => {
+          // 创建自定义内容
+          const content = document.createElement('div')
+          content.className = 'custom-marker'
+          content.style.width = '48px'
+          content.style.height = '48px'
+          content.style.borderRadius = '50%'
+          content.style.overflow = 'hidden'
+          content.style.border = '2px solid white'
+          content.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)'
 
-      map.add(marker)
+          const img = document.createElement('img')
+          img.src = fp.image
+          img.style.width = '100%'
+          img.style.height = '100%'
+          img.style.objectFit = 'cover'
+          content.appendChild(img)
 
-      // 标记点点击事件
-      marker.on('click', () => {
-        map.setCenter(marker.getPosition())
-        map.setZoom(15)
-      })
+          const marker = new AMap.Marker({
+            position: fp.position,
+            title: fp.title,
+            content: content,
+            offset: new AMap.Pixel(-24, -24), // Center the 48x48 marker
+            anchor: 'center',
+          })
+
+          marker.on('click', () => {
+            map.setCenter(marker.getPosition())
+            map.setZoom(10)
+            emit('select-image', fp.image)
+          })
+
+          map.add(marker)
+        })
+      } else {
+        // Fallback or specific single marker usage
+        const marker = new AMap.Marker({
+          position: props.markerPosition,
+          title: '目标位置',
+          icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+          offset: new AMap.Pixel(-10, -30),
+        })
+        map.add(marker)
+        marker.on('click', () => {
+          map.setCenter(marker.getPosition())
+          map.setZoom(15)
+        })
+      }
 
       isLoading.value = false
     })

@@ -4,7 +4,6 @@ import { getRssList } from '@/api'
 import type { Rss } from '@/types/app/rss'
 import Starry from '@/components/Starry/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
-import AppFooter from '@/components/Footer/index.vue'
 
 const loading = ref(true)
 const rssList = ref<Rss[]>([])
@@ -104,7 +103,5 @@ const getRandomColor = () => {
         <p class="text-gray-500">鱼塘里空空如也，快去添加订阅吧！</p>
       </div>
     </div>
-
-    <AppFooter />
   </div>
 </template>

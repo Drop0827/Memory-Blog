@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { onMounted, computed } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
 import { useConfigStore } from '@/stores'
 import { getWebConfigByName } from '@/api'
+import AppFooter from '@/components/Footer/index.vue'
 
 const configStore = useConfigStore()
+const route = useRoute()
+
+const showFooter = computed(() => route.name !== 'memories')
 
 onMounted(async () => {
   try {
@@ -32,6 +36,7 @@ onMounted(async () => {
 <template>
   <!-- 路由占位符，以后页面跳转都会显示在这里 -->
   <router-view />
+  <AppFooter v-if="showFooter" />
 </template>
 
 <style>

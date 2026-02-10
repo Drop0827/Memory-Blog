@@ -18,7 +18,25 @@ request.interceptors.request.use(
     // 从 localStorage 获取 token（登录功能会用到）
     const token = localStorage.getItem('token')
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      let isExpired = false
+      try {
+        const payload = token.split('.')[1]
+        if (payload) {
+          const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+          const json = JSON.parse(window.atob(base64))
+          if (json.exp && Date.now() >= json.exp * 1000) {
+            isExpired = true
+          }
+        }
+      } catch (e) {
+        isExpired = true
+      }
+
+      if (isExpired) {
+        localStorage.removeItem('token')
+      } else {
+        config.headers.Authorization = `Bearer ${token}`
+      }
     }
     return config
   },

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useConfigStore } from '@/stores'
 import {
   getArticleList,
   getCategoryList,
@@ -29,7 +31,7 @@ import Pagination from '@/components/Pagination/index.vue'
 import AstronautImg from '@/assets/image/astronaut.png'
 
 // 图床链接
-const BgImg = 'https://bu.dusays.com/2026/02/04/698346b1404a4.jpg' // 2.jpg
+const BgImg = ref('https://bu.dusays.com/2026/02/04/698346b1404a4.jpg') // 2.jpg
 
 // 数据状态
 const loading = ref(true)
@@ -62,6 +64,25 @@ const typedStrings = ref([
   'printf("Code creates the world.");',
   'console.log("To be a better man.");',
 ])
+
+const configStore = useConfigStore()
+const { theme } = storeToRefs(configStore)
+
+// 监听主题配置变化
+watch(
+  theme,
+  (newTheme) => {
+    if (newTheme) {
+      if (newTheme.swiper_text && newTheme.swiper_text.length > 0) {
+        typedStrings.value = newTheme.swiper_text
+      }
+      if (newTheme.swiper_image) {
+        BgImg.value = newTheme.swiper_image
+      }
+    }
+  },
+  { deep: true, immediate: true },
+)
 
 // 加载数据
 const router = useRouter()
@@ -96,6 +117,8 @@ const loadData = async () => {
     categories.value = categoriesRes.data || []
     tags.value = tagsRes.data || []
     swipers.value = (swipersRes.data || []) as any // 如果 swipersRes 是空的，后续会被覆盖
+    author.value = authorRes.data || null
+
     author.value = authorRes.data || null
 
     // 2. 确定文章查询参数

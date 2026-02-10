@@ -467,7 +467,7 @@ export const deleteRecord = (id: number) => {
 /**
  * 获取足迹列表
  */
-export const getFootprintList = (filterData?: FilterData) => {
+export const getFootprintList = (filterData: FilterData = {}) => {
   return post<Footprint[]>('/footprint/list', filterData)
 }
 

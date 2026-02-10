@@ -4,7 +4,6 @@ import { getRecordList } from '@/api'
 import type { Record as LogRecord } from '@/types/app/record'
 import Starry from '@/components/Starry/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
-import AppFooter from '@/components/Footer/index.vue'
 
 const loading = ref(true)
 const moments = ref<LogRecord[]>([])
@@ -177,8 +176,6 @@ const loadData = async () => {
         <p class="text-gray-500">一片荒芜，博主很懒...</p>
       </div>
     </div>
-
-    <AppFooter />
 
     <!-- Image Preview Modal -->
     <Transition

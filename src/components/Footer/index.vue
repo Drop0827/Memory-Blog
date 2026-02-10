@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { getAuthorInfo, getWebConfigByName } from '@/api'
 import AnimalsImg from '@/components/Footer/images/animals.webp'
 // 图床链接
-const avatarImage = 'https://bu.dusays.com/2026/02/04/698346b17c425.png' // 7.png
+const avatarImage = 'https://bu.dusays.com/2026/02/04/698346b17c425.png' // User provided avatar
 import type { User } from '@/types/app/user'
 import type { Web } from '@/types/app/config'
 
@@ -27,12 +27,11 @@ onMounted(async () => {
 <template>
   <footer class="relative mt-40 z-40 pb-10">
     <!-- Animals Image (Peeking) -->
-    <div
-      class="absolute -top-[55px] left-0 w-full flex justify-center pointer-events-none z-10 w-full overflow-hidden"
-    >
+    <!-- Animals Image (Sitting on top) -->
+    <div class="absolute -top-[48px] left-0 w-full flex justify-center pointer-events-none z-30">
       <img
         :src="AnimalsImg"
-        class="w-[800px] max-w-full object-contain drop-shadow-xl translate-y-2"
+        class="w-[800px] max-w-full object-contain drop-shadow-lg"
         alt="Footer Animals"
       />
     </div>
@@ -40,7 +39,7 @@ onMounted(async () => {
     <!-- Main Content -->
     <div class="bg-white/50 dark:bg-[#1e2530]/50 backdrop-blur-sm pt-12 pb-8 px-4 relative z-20">
       <div
-        class="container mx-auto max-w-[900px] flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-8"
+        class="container mx-auto max-w-[1000px] flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-8"
       >
         <!-- Left: Avatar -->
         <div class="shrink-0 group mx-auto md:mx-0">
@@ -56,8 +55,7 @@ onMounted(async () => {
         <div class="flex-1 text-center md:text-left">
           <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm font-normal">
             {{
-              user?.info ||
-              '一直对网站开发领域很感兴趣，从小就希望有一个属于自己的网站，在17年时候成功进入站长圈，并经过各种自学，以及各种折腾，才有了你现在看到的这个网站'
+              '这是一个记录生活、分享知识的个人博客。热爱技术，也热爱生活，希望能在这里与你共同成长。'
             }}
           </p>
         </div>
@@ -69,23 +67,13 @@ onMounted(async () => {
       >
         <div class="flex items-center gap-2">
           <img
-            src="https://bu.dusays.com/2025/12/04/6930fdfbda057.png"
+            src="https://bu.dusays.com/2026/02/07/6987190aeee4d.png"
             class="w-3 h-3 opacity-60"
           />
           <span>豫ICP备2020031040号-1</span>
         </div>
         <div class="flex items-center gap-1 opacity-80">
           <span>&copy; {{ currentYear }} Memory Blog.</span>
-          <span class="mx-1">|</span>
-          <span
-            >Powered by
-            <a
-              href="https://github.com/LiuYuYang01/ThriveX-Admin"
-              target="_blank"
-              class="hover:text-blue-500 transition-colors"
-              >ThriveX</a
-            ></span
-          >
         </div>
       </div>
     </div>

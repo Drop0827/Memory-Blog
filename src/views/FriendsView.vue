@@ -4,7 +4,6 @@ import { getLinkList } from '@/api'
 import type { Link } from '@/types/app/web'
 import Starry from '@/components/Starry/index.vue'
 import AppNavbar from '@/components/Layout/AppNavbar.vue'
-import AppFooter from '@/components/Footer/index.vue'
 
 const loading = ref(true)
 const links = ref<Link[]>([])
@@ -99,7 +98,5 @@ const getRandomColor = () => {
         <p class="text-gray-500">博主还没有添加小伙伴呢</p>
       </div>
     </div>
-
-    <AppFooter />
   </div>
 </template>
